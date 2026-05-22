@@ -9,17 +9,17 @@ app = Flask(__name__)
 CORS(app) 
 
 # ==========================================
-# 🧠 AI CONFIGURATION 
+# 🧠 AI CONFIGURATION (404 Error Fixed)
 # ==========================================
 GEMINI_API_KEY = "AIzaSyA9trqBMSf37pfRyIITnC6H_t2oUGFvF8c" 
 genai.configure(api_key=GEMINI_API_KEY)
 
 try:
-    gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+    # Changed to stable 'gemini-pro' to prevent 404 error on Render
+    gemini_model = genai.GenerativeModel('gemini-pro')
 except:
     gemini_model = None
 
-# ML Core Logic
 def calculate_entropy(text):
     if not text: return 0
     entropy = 0
@@ -78,7 +78,7 @@ def generate_report():
     
     if not gemini_model: return jsonify({"report": "API Error: Gemini key invalid."})
     
-    prompt = f"Act as an expert SOC Analyst. Write a highly technical, 4-bullet Incident Report for the URL '{url}' with a Threat Score of {score}/100. Highlight potential phishing indicators."
+    prompt = f"Act as an expert SOC Analyst. Write a short, technical 3-bullet Incident Report for the URL '{url}' with a Threat Score of {score}/100. Mention risks."
     try:
         response = gemini_model.generate_content(prompt)
         return jsonify({"report": response.text})
@@ -90,7 +90,7 @@ def chat():
     message = request.json.get('message', '')
     if not gemini_model: return jsonify({"reply": "Chatbot offline."})
     
-    prompt = f"You are PhishGuard Copilot, an advanced SOC assistant. Answer concisely: {message}"
+    prompt = f"You are PhishGuard Copilot, a SOC assistant. Answer in 2 short sentences: {message}"
     try:
         response = gemini_model.generate_content(prompt)
         return jsonify({"reply": response.text})
