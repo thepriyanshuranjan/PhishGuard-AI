@@ -280,7 +280,7 @@
                 let exactDomain = new URL(processUrl).hostname;
                 if (exactDomain.startsWith('www.')) exactDomain = exactDomain.substring(4);
                 
-                const res = await fetch('http://localhost:8000/api/analyze', { 
+                const res = await fetch('https://phishguard-ai-gvor.onrender.com/', { 
                     method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({url: processUrl}) 
                 });
                 const data = await res.json();
@@ -391,7 +391,7 @@
                 let isSpoofed = false;
                 let flags = [];
                 if(headers) {
-                    const res = await fetch('http://localhost:8000/api/email-forensics', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({headers}) });
+                    const res = await fetch('https://phishguard-ai-gvor.onrender.com/api/email-forensics', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({headers}) });
                     const data = await res.json();
                     isSpoofed = data.is_spoofed;
                     flags = data.flags;
@@ -441,7 +441,7 @@
         // --- 3. DATABASE & LOGS LOGIC ---
         async function fetchMiniHistory() {
             try {
-                const res = await fetch('http://localhost:8000/api/history');
+                const res = await fetch('https://phishguard-ai-gvor.onrender.com/api/history');
                 const data = await res.json();
                 const box = document.getElementById('miniHistoryBox');
                 box.innerHTML = '';
