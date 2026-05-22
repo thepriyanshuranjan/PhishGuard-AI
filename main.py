@@ -4,15 +4,15 @@ import google.generativeai as genai
 from textblob import TextBlob
 import math
 import random
-import datetime
 
 app = Flask(__name__)
+# CORS enabled to allow communication with Vercel frontend
 CORS(app) 
 
 # ==========================================
 # 🧠 AI CONFIGURATION 
 # ==========================================
-# APNI GOOGLE AI STUDIO KI KEY YAHAN DAALEIN
+# API Key integrated directly for deployment
 GEMINI_API_KEY = "AIzaSyA9trqBMSf37pfRyIITnC6H_t2oUGFvF8c" 
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -21,6 +21,9 @@ try:
 except:
     gemini_model = None
 
+# ==========================================
+# 📊 CORE ML LOGIC
+# ==========================================
 def calculate_entropy(text):
     if not text: return 0
     entropy = 0
@@ -29,6 +32,11 @@ def calculate_entropy(text):
         entropy += - p_x * math.log(p_x, 2)
     return round(entropy, 2)
 
+# ==========================================
+# 🚀 API ENDPOINTS
+# ==========================================
+
+# 1. URL Analysis Endpoint
 @app.route('/api/analyze', methods=['POST'])
 def analyze_url():
     data = request.json
@@ -37,10 +45,10 @@ def analyze_url():
     if not url: return jsonify({"error": "URL missing"}), 400
         
     entropy = calculate_entropy(url)
-    suspicious_keywords = ['login', 'verify', 'update', 'free', 'secure', 'auth', 'account']
+    suspicious_keywords = ['login', 'verify', 'update', 'free', 'secure', 'auth', 'account', 'admin']
     found_keywords = [word for word in suspicious_keywords if word in url]
     
-    # Base Engine Logic
+    # ML Logic
     risk_score = 15
     if entropy > 4.0: risk_score += 30
     if len(found_keywords) > 0: risk_score += 25
@@ -51,7 +59,6 @@ def analyze_url():
     risk_score = min(max(risk_score, 0), 100)
     status = "MALICIOUS" if risk_score >= 60 else "SAFE"
     
-    # Generating data for your ORIGINAL complex dashboard
     return jsonify({
         "score": risk_score,
         "status": status,
@@ -64,10 +71,10 @@ def analyze_url():
         "ip_address": f"{random.randint(10,255)}.{random.randint(10,255)}.{random.randint(10,255)}.{random.randint(10,255)}"
     })
 
+# 2. Email NLP Endpoint
 @app.route('/api/analyze-email', methods=['POST'])
 def analyze_email():
-    data = request.json
-    text = data.get('text', '')
+    text = request.json.get('text', '')
     if not text: return jsonify({"error": "Text missing"}), 400
     
     analysis = TextBlob(text)
@@ -77,13 +84,14 @@ def analyze_email():
     status = "PANIC / HIGH RISK" if urgency_percentage > 70 else "NORMAL"
     return jsonify({"urgency_score": urgency_percentage, "status": status})
 
+# 3. AI Incident Report Endpoint
 @app.route('/api/report', methods=['POST'])
 def generate_report():
     data = request.json
     url = data.get('url', '')
     score = data.get('score', 0)
     
-    if not gemini_model: return jsonify({"report": "API Error: Gemini key invalid."})
+    if not gemini_model: return jsonify({"report": "API Error: Gemini not initialized."})
     
     prompt = f"Act as an expert SOC Analyst. Write a short, professional 4-bullet Incident Report for the URL '{url}' which received a Threat Score of {score}/100."
     try:
@@ -92,10 +100,10 @@ def generate_report():
     except Exception as e:
         return jsonify({"report": "Failed to generate report."})
 
+# 4. Copilot Chatbot Endpoint
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    data = request.json
-    message = data.get('message', '')
+    message = request.json.get('message', '')
     if not gemini_model: return jsonify({"reply": "Chatbot offline."})
     
     prompt = f"You are PhishGuard Copilot, a cybersecurity assistant. Answer concisely in 2 sentences: {message}"
