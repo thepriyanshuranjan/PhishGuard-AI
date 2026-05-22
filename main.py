@@ -36,19 +36,18 @@ def init_db():
 
 init_db()
 
-# --- V3 SMART AI MODEL (Ignores fake SSL) ---
+# --- V3 SMART AI MODEL ---
 model_path = 'phish_model_v3.pkl'
 if not os.path.exists(model_path):
     print("⚠️ Training V3 Smart ML Model...")
     try:
         from sklearn.ensemble import RandomForestClassifier
         import pandas as pd
-        # Smarter dummy dataset: Teaches AI that phishing CAN have SSL
         data = {
             'length': [20, 85, 15, 120, 95, 25], 
             'subdomains': [0, 3, 0, 4, 2, 0],
             'has_ip': [0, 1, 0, 1, 0, 0], 
-            'has_ssl': [1, 0, 1, 0, 1, 1], # Note: Malicious rows also have SSL=1
+            'has_ssl': [1, 0, 1, 0, 1, 1], 
             'entropy': [3.1, 4.8, 2.5, 4.9, 4.5, 2.8], 
             'keyword_count': [0, 3, 0, 4, 2, 0],
             'is_phishing': [0, 1, 0, 1, 1, 0]
@@ -57,7 +56,6 @@ if not os.path.exists(model_path):
         model = RandomForestClassifier(n_estimators=20, random_state=42)
         model.fit(df.drop('is_phishing', axis=1), df['is_phishing'])
         joblib.dump(model, model_path)
-        print("✅ V3 ML Model generated successfully.")
     except Exception as e:
         pass
 
@@ -96,19 +94,17 @@ async def analyze_url(request: URLRequest):
         suspicious_list = ['login', 'verify', 'secure', 'account', 'update', 'banking', 'admin', 'auth']
         keywords_found = [kw for kw in suspicious_list if kw in url.lower()]
 
-        # BRAND IMPERSONATION LOGIC (The Ultimate Fix)
+        # BRAND IMPERSONATION LOGIC
         brands = ["paypal", "google", "microsoft", "apple", "facebook", "amazon", "netflix", "bank"]
         is_spoofing = any(b in url.lower() for b in brands) and not any(b in clean_domain for b in brands)
         if is_spoofing:
             keywords_found.append("BRAND_SPOOF_DETECTED")
 
-        # Determine true malicious status
         is_malicious = target_length > 60 or len(keywords_found) > 0 or has_ip or is_spoofing
         vt_flags = random.randint(5, 14) if is_malicious else 0
         domain_age = random.randint(1, 10) if is_malicious else random.randint(1000, 3000)
         creation_date = (datetime.now() - timedelta(days=domain_age)).strftime("%Y-%m-%d")
         
-        # Base ML Prediction
         if ai_model:
             model_input = np.array([[target_length, subdomain_count, int(has_ip), int(has_ssl), entropy_val, len(keywords_found)]])
             probs = ai_model.predict_proba(model_input)[0]
@@ -119,11 +115,9 @@ async def analyze_url(request: URLRequest):
             score = min(score, 100)
             ai_conf = 85.0
 
-        # OVERRIDE FOR HACKATHON: Ensure Phishing URLs fail hard
         if is_spoofing or is_malicious:
             score = max(score, random.randint(75, 95))
 
-        # Safe domains override
         if clean_domain in ["google.com", "youtube.com", "instagram.com", "facebook.com", "github.com"]:
             score = random.randint(10, 20)
             has_ssl = True
@@ -167,7 +161,7 @@ async def analyze_email(request: EmailRequest):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     c.execute("INSERT INTO threats (target, type, risk_score, verdict, timestamp) VALUES (?, ?, ?, ?, ?)", 
-              ("Email Headers", 'EMAIL', score, v, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+              ("Email Content", 'EMAIL', score, v, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     conn.commit()
     conn.close()
     return {"is_spoofed": score > 50, "risk_score": score, "flags": flags if flags else ["All Security Protocols Passed"]}
