@@ -280,7 +280,7 @@
                 let exactDomain = new URL(processUrl).hostname;
                 if (exactDomain.startsWith('www.')) exactDomain = exactDomain.substring(4);
                 
-                const res = await fetch('https://phishguard-ai-gvor.onrender.com/', { 
+                const res = await fetch('https://phishguard-ai-gvor.onrender.com/api/analyze', { 
                     method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({url: processUrl}) 
                 });
                 const data = await res.json();
@@ -454,7 +454,7 @@
         
         async function fetchHistoryFull() {
             try {
-                const res = await fetch('http://localhost:8000/api/history');
+                const res = await fetch('https://phishguard-ai-gvor.onrender.com/api/history');
                 const data = await res.json();
                 const tbody = document.getElementById('historyTableBody');
                 tbody.innerHTML = '';
