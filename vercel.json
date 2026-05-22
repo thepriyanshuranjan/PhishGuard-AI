@@ -1,5 +1,6 @@
 {
   "buildCommand": "echo 'No build needed for Frontend'",
   "installCommand": "echo 'No install needed for Frontend'",
+  "outputDirectory": ".",
   "framework": null
 }
