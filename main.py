@@ -10,36 +10,34 @@ app = Flask(__name__)
 CORS(app) 
 
 # ==========================================
-# 🧠 DIRECT AI API BYPASS WITH FALLBACK (NO 404 ERRORS)
+# 🧠 DIRECT STABLE AI API (404 ERROR FIXED)
 # ==========================================
 GEMINI_API_KEY = "AIzaSyA9trqBMSf37pfRyIITnC6H_t2oUGFvF8c" 
 
 def call_gemini_api(prompt):
-    # Try the latest flash model first
-    primary_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={GEMINI_API_KEY}"
-    fallback_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
-    
+    # Using the most stable endpoint without any '-latest' tags to prevent 404s
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     data = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode('utf-8')
     
     try:
-        # Attempt Primary Model
-        req = urllib.request.Request(primary_url, data=data, headers={'Content-Type': 'application/json'})
+        req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'})
         with urllib.request.urlopen(req) as response:
             res_json = json.loads(response.read().decode('utf-8'))
             return res_json['candidates'][0]['content']['parts'][0]['text']
     except urllib.error.HTTPError as e:
+        # Failsafe Fallback
         if e.code == 404:
-            # If 404 occurs, seamlessly fallback to gemini-pro
             try:
-                req_fallback = urllib.request.Request(fallback_url, data=data, headers={'Content-Type': 'application/json'})
-                with urllib.request.urlopen(req_fallback) as response:
-                    res_json = json.loads(response.read().decode('utf-8'))
-                    return res_json['candidates'][0]['content']['parts'][0]['text']
-            except Exception as ex:
-                return f"AI Engine Fallback Failed: {str(ex)}"
+                fallback = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
+                req2 = urllib.request.Request(fallback, data=data, headers={'Content-Type': 'application/json'})
+                with urllib.request.urlopen(req2) as res2:
+                    res_json2 = json.loads(res2.read().decode('utf-8'))
+                    return res_json2['candidates'][0]['content']['parts'][0]['text']
+            except Exception as ex2:
+                return "System Error: AI models temporarily unavailable."
         return f"API Error: HTTP {e.code}"
     except Exception as e:
-        return f"System Offline: {str(e)}"
+        return f"Network Offline: {str(e)}"
 
 # ==========================================
 # 📊 ML CORE LOGIC
@@ -61,8 +59,7 @@ def analyze_url():
     suspicious_keywords = ['login', 'verify', 'update', 'free', 'secure', 'auth', 'account', 'admin']
     found_keywords = [word for word in suspicious_keywords if word in url]
     
-    # Safe score logic fix
-    risk_score = 5 # Start low for safe sites
+    risk_score = 5
     if entropy > 3.8: risk_score += 25
     if len(found_keywords) > 0: risk_score += (len(found_keywords) * 20)
     if "-" in url: risk_score += 15
@@ -100,16 +97,14 @@ def generate_report():
     data = request.json
     url = data.get('url', 'Unknown')
     score = data.get('score', 0)
-    prompt = f"Act as an expert SOC Analyst. Write a short, highly technical 3-bullet point Incident Report for the URL '{url}' with a Threat Score of {score}/100. Highlight risks clearly."
-    
+    prompt = f"Act as an expert SOC Analyst. Write a highly technical 3-bullet point Incident Report for the URL '{url}' with a Threat Score of {score}/100. Be concise."
     ai_response = call_gemini_api(prompt)
     return jsonify({"report": ai_response})
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
     message = request.json.get('message', '')
-    prompt = f"You are PhishGuard Copilot, an expert cybersecurity assistant. Answer concisely in 1 or 2 sentences to this query: {message}"
-    
+    prompt = f"You are PhishGuard Copilot, an expert cybersecurity AI. Answer this user clearly and concisely in 2 sentences: {message}"
     ai_response = call_gemini_api(prompt)
     return jsonify({"reply": ai_response})
 
