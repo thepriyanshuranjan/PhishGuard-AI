@@ -9,16 +9,17 @@ app = Flask(__name__)
 CORS(app) 
 
 # ==========================================
-# 🧠 AI CONFIGURATION (404 Error Fixed)
+# 🧠 AI CONFIGURATION (404 ERROR FIXED)
 # ==========================================
 GEMINI_API_KEY = "AIzaSyA9trqBMSf37pfRyIITnC6H_t2oUGFvF8c" 
 genai.configure(api_key=GEMINI_API_KEY)
 
 try:
-    # Changed to stable 'gemini-pro' to prevent 404 error on Render
-    gemini_model = genai.GenerativeModel('gemini-pro')
-except:
+    # UPDATED to latest stable model to fix 404 error
+    gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+except Exception as e:
     gemini_model = None
+    print(f"AI Error: {e}")
 
 def calculate_entropy(text):
     if not text: return 0
@@ -76,9 +77,9 @@ def generate_report():
     url = data.get('url', 'Unknown')
     score = data.get('score', 0)
     
-    if not gemini_model: return jsonify({"report": "API Error: Gemini key invalid."})
+    if not gemini_model: return jsonify({"report": "API Error: AI Engine is offline."})
     
-    prompt = f"Act as an expert SOC Analyst. Write a short, technical 3-bullet Incident Report for the URL '{url}' with a Threat Score of {score}/100. Mention risks."
+    prompt = f"Act as an expert SOC Analyst. Write a short, highly technical 3-bullet Incident Report for the URL '{url}' with a Threat Score of {score}/100. Highlight risks clearly."
     try:
         response = gemini_model.generate_content(prompt)
         return jsonify({"report": response.text})
@@ -88,14 +89,14 @@ def generate_report():
 @app.route('/api/chat', methods=['POST'])
 def chat():
     message = request.json.get('message', '')
-    if not gemini_model: return jsonify({"reply": "Chatbot offline."})
+    if not gemini_model: return jsonify({"reply": "System Offline: AI core not reachable."})
     
-    prompt = f"You are PhishGuard Copilot, a SOC assistant. Answer in 2 short sentences: {message}"
+    prompt = f"You are PhishGuard Copilot, an expert cybersecurity assistant. Answer concisely in 2 sentences to this user query: {message}"
     try:
         response = gemini_model.generate_content(prompt)
         return jsonify({"reply": response.text})
     except Exception as e:
-        return jsonify({"reply": "Network interruption."})
+        return jsonify({"reply": "Network interruption connecting to AI."})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
