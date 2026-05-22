@@ -8,154 +8,202 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { pgDark: '#0d1117', pgPanel: '#161b22', pgGreen: '#2ea043', pgRed: '#f85149' } } }
+            theme: { extend: { colors: { pgDark: '#0a0e14', pgPanel: '#111820', pgGreen: '#1ed760', pgRed: '#ff4b4b', pgBorder: '#1f2937' } } }
         }
     </script>
     <style>
-        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden; }
-        .panel { background-color: #161b22; border: 1px solid #30363d; border-radius: 8px; }
+        body { background-color: #0a0e14; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden; }
+        .panel { background-color: #111820; border: 1px solid #1f2937; border-radius: 8px; }
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
-        .glow-red { box-shadow: 0 0 15px rgba(248, 81, 73, 0.4); border-color: #f85149; }
-        .glow-green { box-shadow: 0 0 15px rgba(46, 160, 67, 0.4); border-color: #2ea043; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        .glow-red { box-shadow: 0 0 15px rgba(255, 75, 75, 0.2); }
+        .glow-green { box-shadow: 0 0 15px rgba(30, 215, 96, 0.1); }
     </style>
 </head>
 <body class="flex h-screen">
 
-    <aside class="w-64 panel m-2 flex flex-col">
-        <div class="p-4 border-b border-[#30363d] flex items-center gap-3">
+    <aside class="w-64 panel m-2 flex flex-col hidden md:flex">
+        <div class="p-4 border-b border-pgBorder flex items-center gap-3">
             <i class="fa-solid fa-shield-halved text-pgGreen text-2xl"></i>
             <div>
-                <h1 class="font-bold text-white leading-tight">PhishGuard</h1>
-                <p class="text-[10px] text-gray-400">ENTERPRISE SOC SUITE</p>
+                <h1 class="font-bold text-white text-sm">PhishGuard Enterprise</h1>
+                <p class="text-[9px] text-gray-500">101 AUTOMATED ANALYSIS COMMAND CENTER</p>
             </div>
         </div>
-        <nav class="flex-1 p-2 space-y-2 mt-2 text-sm">
-            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="w-full flex items-center gap-3 px-3 py-2 bg-[#21262d] rounded text-white border-l-4 border-pgGreen transition">
-                <i class="fa-solid fa-table-columns w-5 text-left"></i> URL ML Scanner
+        <nav class="flex-1 p-2 space-y-1 mt-2">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="w-full flex items-center gap-3 px-3 py-3 bg-[#1c2431] rounded text-white border-l-4 border-pgGreen transition text-sm">
+                <i class="fa-solid fa-table-columns w-5 text-left text-pgGreen"></i>
+                <div class="text-left"><p class="font-bold leading-tight">Dashboard</p><p class="text-[10px] text-gray-400">Current URL Scanner</p></div>
             </button>
-            <button onclick="switchTab('nlp')" id="tab-nlp" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-[#21262d] rounded transition text-gray-400 hover:text-white border-l-4 border-transparent">
-                <i class="fa-solid fa-envelope-open-text w-5 text-left"></i> Email Forensics (NLP)
+            <button onclick="switchTab('nlp')" id="tab-nlp" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-[#1c2431] rounded transition text-gray-400 hover:text-white border-l-4 border-transparent text-sm">
+                <i class="fa-solid fa-brain w-5 text-left"></i>
+                <div class="text-left"><p class="font-bold leading-tight">Advanced AI Analysis</p><p class="text-[10px] text-gray-400">NLP View</p></div>
             </button>
         </nav>
     </aside>
 
     <main class="flex-1 flex flex-col p-2 h-full overflow-y-auto">
         
-        <header class="panel mb-4 flex justify-between items-center p-3 px-5">
-            <div class="flex items-center gap-2 text-xs text-pgRed font-bold tracking-wider">
-                <i class="fa-solid fa-satellite-dish animate-pulse"></i> GLOBAL INTEL FEED ACTIVE
+        <header class="panel mb-2 flex justify-between items-center p-2 px-4 text-xs">
+            <div class="flex items-center gap-2 text-pgRed font-bold">
+                <div class="w-2 h-2 bg-pgRed rounded-full animate-pulse"></div> GLOBAL INTEL FEED
+            </div>
+            <div class="flex items-center gap-2 text-gray-400">
+                <span>[ALERT] Zero-day MFA bypass campaign targeting Financial sectors</span>
             </div>
             <div class="flex items-center gap-3">
-                <span class="bg-[#21262d] px-3 py-1 rounded-full text-xs text-gray-300 border border-[#30363d]"><i class="fa-solid fa-server mr-1"></i> AP-SOUTH-1 NODE</span>
-                <span class="bg-pgGreen/10 text-pgGreen px-3 py-1 rounded text-xs font-bold border border-pgGreen/50"><i class="fa-solid fa-check-circle mr-1"></i> WADE Engine: Active</span>
+                <span class="bg-[#1c2431] px-3 py-1 rounded-full border border-pgBorder"><i class="fa-solid fa-server text-pgGreen mr-1"></i> AP-SOUTH-1 NODE</span>
+                <span class="bg-[#1c2431] px-3 py-1 rounded-full border border-pgBorder text-white font-bold">Analyst Profile <i class="fa-solid fa-circle-check text-pgGreen ml-1"></i></span>
             </div>
         </header>
 
-        <div id="view-dashboard" class="tab-content active h-full flex flex-col">
-            <div class="flex gap-2 mb-4">
-                <div class="flex-1 bg-[#0d1117] border border-[#30363d] rounded flex items-center px-3 focus-within:border-pgGreen transition">
-                    <i class="fa-solid fa-link text-gray-500 mr-2"></i>
-                    <input type="text" id="urlInput" placeholder="Analyze URL/Link... (e.g., https://amazon-support.care-verificar.com)" class="bg-transparent w-full p-3 outline-none text-white text-sm">
+        <div id="view-dashboard" class="tab-content active h-full flex flex-col space-y-2">
+            
+            <div class="flex gap-2">
+                <div class="flex-1 bg-pgDark border border-pgBorder rounded flex items-center px-3">
+                    <i class="fa-solid fa-link text-pgGreen mr-2"></i>
+                    <input type="text" id="urlInput" placeholder="www.instagram.com" value="https://instagram.com" class="bg-transparent w-full p-2 outline-none text-white text-sm">
                 </div>
-                <button onclick="analyzeURL()" id="analyzeBtn" class="bg-pgGreen hover:bg-[#238636] text-black px-8 py-2 rounded font-bold transition flex items-center gap-2">
+                <button onclick="analyzeURL()" id="analyzeBtn" class="bg-pgGreen hover:bg-[#1ab854] text-black px-6 py-2 rounded font-bold transition flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-magnifying-glass"></i> Analyze Link
                 </button>
             </div>
 
-            <div class="grid grid-cols-3 gap-4 mb-4">
-                <div id="matrix-panel" class="panel p-5 flex flex-col items-center justify-center relative col-span-1 h-56 transition-all duration-500">
-                    <h3 class="absolute top-3 left-3 text-xs text-gray-400 font-bold uppercase">Predictive ML Engine Score (v3.0)</h3>
-                    <div class="mt-4 text-center">
-                        <p id="score-display" class="text-6xl font-bold text-white">--</p>
-                        <p class="text-xs text-gray-400 mt-2">/ 100 Threat Score</p>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                <div class="panel p-3">
+                    <h3 class="text-[10px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-lock mr-1"></i> SSL Check</h3>
+                    <p class="text-[9px] text-gray-500 mb-2">Checks if the website encryption is safe.</p>
+                    <div class="flex items-center gap-2">
+                        <i id="ssl-icon" class="fa-solid fa-lock text-2xl text-pgGreen"></i>
+                        <div><p id="ssl-text" class="text-sm font-bold text-pgGreen">VALIDATED</p><p class="text-[10px] text-gray-400">Enforced (HTTPS)</p></div>
                     </div>
-                    <div id="status-badge" class="mt-4 px-6 py-1 rounded-full border border-gray-600 text-gray-400 font-bold text-xs tracking-widest bg-[#0d1117]">AWAITING SCAN</div>
                 </div>
-
-                <div class="panel p-4 bg-[#0d1117] col-span-2 flex flex-col border-[#30363d] h-56">
-                    <div class="flex justify-between items-center border-b border-[#30363d] pb-2 mb-2">
-                        <h3 class="text-xs text-gray-400 font-bold uppercase">Live Forensics Terminal</h3>
-                        <span class="text-[10px] text-pgGreen flex items-center gap-1"><div class="w-2 h-2 bg-pgGreen rounded-full animate-pulse"></div> LIVE DATA</span>
-                    </div>
-                    <div id="terminal" class="text-xs font-mono text-gray-400 space-y-1 h-full overflow-y-auto pb-4">
-                        <p>> System Initialized. Waiting for target...</p>
-                    </div>
+                <div class="panel p-3">
+                    <h3 class="text-[10px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-shield-halved mr-1"></i> Domain Age</h3>
+                    <p class="text-[9px] text-gray-500 mb-2">Scams are usually brand new.</p>
+                    <div class="w-full bg-gray-700 h-1 rounded-full mb-1"><div class="bg-pgGreen h-1 rounded-full w-4/5"></div></div>
+                    <p id="age-text" class="text-[10px] text-pgGreen text-center font-bold">Age: -- Days</p>
+                </div>
+                <div class="panel p-3 relative overflow-hidden">
+                    <h3 class="text-[10px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-globe mr-1"></i> Server Location</h3>
+                    <p class="text-[9px] text-gray-500 mb-1">Physical storage location.</p>
+                    <p id="location-text" class="text-xs text-white font-bold">United States</p>
+                    <p id="ip-text" class="text-[9px] text-gray-400 mt-1">IP: --</p>
+                </div>
+                <div class="panel p-3">
+                    <h3 class="text-[10px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Suspicious Words</h3>
+                    <p class="text-[9px] text-gray-500 mb-2">Scans for trap words like 'login'.</p>
+                    <p id="keywords-text" class="text-xs font-bold text-pgGreen mt-3">Safe - No Anomalies</p>
                 </div>
             </div>
 
-            <div class="panel p-4 flex-1 flex flex-col justify-center">
-                <button onclick="generateAIReport()" class="w-full bg-[#161b22] border-2 border-yellow-500 hover:bg-yellow-500/10 text-yellow-500 py-3 rounded text-sm transition font-bold flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-file-pdf"></i> Generate Full SOC Incident Report (AI PDF)
-                </button>
-                <div id="report-output" class="text-sm text-gray-200 mt-4 p-4 bg-[#0d1117] border border-[#30363d] rounded hidden h-32 overflow-y-auto leading-relaxed"></div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="panel p-3">
+                    <h3 class="text-[10px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-star mr-1"></i> Global Scanners</h3>
+                    <p class="text-[9px] text-gray-500 mb-2">Cross-checks against 94 Antivirus engines.</p>
+                    <div class="flex gap-1 mb-1">
+                        <div class="w-4 h-1 bg-pgGreen rounded"></div><div class="w-4 h-1 bg-pgGreen rounded"></div><div class="w-4 h-1 bg-pgGreen rounded"></div>
+                        <div class="w-4 h-1 bg-gray-700 rounded"></div><div class="w-4 h-1 bg-gray-700 rounded"></div>
+                    </div>
+                    <p id="av-text" class="text-[10px] text-pgGreen font-bold">0/94 Engines Flagged (Clean)</p>
+                </div>
+                <div class="panel p-3">
+                    <h3 class="text-[10px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-chart-line mr-1"></i> Randomness</h3>
+                    <p class="text-[9px] text-gray-500 mb-1">High score = suspicious.</p>
+                    <p id="entropy-text" class="text-2xl font-bold text-white">0.00</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 flex-1 pb-2">
+                <div class="panel p-4 flex flex-col items-center justify-center relative" id="matrix-panel">
+                    <h3 class="absolute top-2 left-3 text-[10px] text-gray-400 font-bold uppercase">Final Threat Matrix</h3>
+                    <span class="absolute top-2 right-3 text-[9px] text-pgGreen flex items-center gap-1"><div class="w-1.5 h-1.5 bg-pgGreen rounded-full"></div> LIVE DATA</span>
+                    
+                    <div class="relative w-32 h-32 mt-4 flex items-center justify-center">
+                        <div id="gauge-circle" class="absolute w-full h-full rounded-full border-4 border-pgBorder border-t-pgGreen border-r-pgGreen transform -rotate-45 transition-all"></div>
+                        <div class="text-center z-10">
+                            <p id="score-display" class="text-3xl font-bold text-white">0</p>
+                            <p class="text-[10px] text-gray-400">/ 100</p>
+                        </div>
+                    </div>
+                    <div id="status-badge" class="mt-4 px-8 py-1 border border-pgGreen rounded-full text-pgGreen text-xs font-bold tracking-wider">AWAITING</div>
+                </div>
+
+                <div class="panel p-0 bg-pgDark border-pgBorder col-span-1 lg:col-span-2 flex flex-col overflow-hidden">
+                    <div class="flex-1 p-3 overflow-y-auto" id="terminal">
+                        <p class="text-[10px] font-mono text-gray-400">> Initiating Deep Forensics...</p>
+                        <p class="text-[10px] font-mono text-gray-400">> Awaiting target URL injection.</p>
+                    </div>
+                    <div class="p-2 border-t border-pgBorder bg-[#111820]">
+                        <button onclick="generateAIReport()" class="w-full bg-[#1c2431] border border-pgGreen/30 hover:bg-pgGreen/10 text-white py-2 rounded text-xs font-bold transition flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-file-invoice text-pgGreen"></i> Generate AI Incident Report
+                        </button>
+                        <div id="report-output" class="text-[10px] text-gray-300 mt-2 hidden h-16 overflow-y-auto p-1"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="view-nlp" class="tab-content h-full">
-            <div class="panel p-6 h-full flex flex-col relative">
-                <h2 class="text-xl font-bold text-white mb-1">Advanced Email & Chat Forensics (NLP Engine)</h2>
-                <p class="text-xs text-gray-400 mb-4">Identify psychological manipulation, urgency, and panic triggers in suspicious text.</p>
-                
-                <textarea id="nlpInput" placeholder="Paste the suspicious email, SMS, or WhatsApp forward here..." class="w-full h-32 bg-[#0d1117] border border-[#30363d] p-4 text-white text-sm outline-none focus:border-pgGreen rounded mb-4 resize-none"></textarea>
-                
-                <button onclick="analyzeEmail()" id="nlpBtn" class="bg-pgGreen hover:bg-[#238636] text-black px-6 py-2 rounded font-bold w-48 mb-6 transition">
-                    <i class="fa-solid fa-microchip"></i> Analyze Sentiment
-                </button>
-
+            <div class="panel p-6 h-full flex flex-col">
+                <h2 class="text-lg font-bold text-white mb-1"><i class="fa-solid fa-brain text-pgGreen mr-2"></i> Email Sentiment (NLP)</h2>
+                <textarea id="nlpInput" placeholder="Paste suspicious email/SMS text here..." class="w-full h-32 bg-pgDark border border-pgBorder p-3 text-white text-sm outline-none focus:border-pgGreen rounded mb-4 resize-none"></textarea>
+                <button onclick="analyzeEmail()" id="nlpBtn" class="bg-pgGreen text-black px-6 py-2 rounded text-sm font-bold w-48 mb-6">Analyze Sentiment</button>
                 <div class="flex gap-4">
-                    <div id="nlp-panel" class="border border-[#30363d] rounded p-6 text-center w-64 bg-[#0d1117] transition-all duration-500">
-                        <h3 class="text-xs text-gray-400 font-bold mb-2">URGENCY SCORE</h3>
-                        <p id="nlp-score" class="text-5xl font-bold text-white mb-2">0%</p>
-                        <p id="nlp-status" class="text-xs font-bold text-gray-500">AWAITING TEXT</p>
+                    <div id="nlp-panel" class="border border-pgBorder rounded p-4 text-center w-48 bg-pgDark">
+                        <h3 class="text-[10px] text-gray-400 font-bold mb-2">URGENCY SCORE</h3>
+                        <p id="nlp-score" class="text-4xl font-bold text-white mb-1">0%</p>
+                        <p id="nlp-status" class="text-[10px] font-bold text-gray-500">AWAITING TEXT</p>
                     </div>
-                    <div class="flex-1 border border-[#30363d] rounded p-6 bg-[#0d1117]">
-                        <h3 class="text-xs text-gray-400 font-bold mb-2">Sentiment Map Insight</h3>
-                        <p id="nlp-insight" class="text-sm text-gray-300">Paste text and run scan to extract semantic mapping details and threat vectors.</p>
+                    <div class="flex-1 border border-pgBorder rounded p-4 bg-pgDark text-xs text-gray-300">
+                        <p id="nlp-insight">Paste text to extract semantic psychological urgency.</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        <div id="chat-window" class="panel w-80 mb-4 hidden flex-col shadow-2xl border border-pgGreen bg-[#161b22]">
-            <div class="bg-[#21262d] p-3 border-b border-[#30363d] flex justify-between items-center rounded-t-lg">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-shield-cat text-pgGreen"></i><span class="font-bold text-sm text-white">PhishGuard Copilot</span></div>
-                <i class="fa-solid fa-xmark cursor-pointer text-gray-400 hover:text-white transition" onclick="toggleChat()"></i>
+    <div class="fixed bottom-5 right-5 z-50 flex flex-col items-end">
+        <div id="chat-window" class="panel w-72 mb-3 hidden flex-col shadow-2xl border border-pgBorder bg-[#111820]">
+            <div class="bg-[#1c2431] p-2 border-b border-pgBorder flex justify-between items-center rounded-t-lg">
+                <div class="flex items-center gap-2"><i class="fa-solid fa-shield text-pgGreen text-xs"></i><span class="font-bold text-xs text-white">PhishGuard Copilot</span></div>
+                <i class="fa-solid fa-xmark cursor-pointer text-gray-400 text-xs hover:text-white" onclick="toggleChat()"></i>
             </div>
-            <div id="chat-messages" class="h-72 overflow-y-auto p-3 text-xs space-y-3 bg-[#0d1117]">
-                <div class="bg-[#21262d] text-gray-200 p-3 rounded-lg border border-[#30363d] shadow-sm">Hello! I am your AI Virtual Analyst. Paste a suspicious text or ask me a security question!</div>
+            <div id="chat-messages" class="h-56 overflow-y-auto p-2 text-[10px] space-y-2 bg-pgDark">
+                <div class="bg-[#1c2431] text-gray-200 p-2 rounded border border-pgBorder">Hello! I am your AI Analyst. How can I assist?</div>
             </div>
-            <div class="p-3 bg-[#161b22] border-t border-[#30363d] flex gap-2 rounded-b-lg">
-                <input type="text" id="chat-input" placeholder="Ask AI..." class="flex-1 bg-[#0d1117] text-white text-xs px-3 py-2 rounded-md border border-[#30363d] outline-none focus:border-pgGreen" onkeypress="if(event.key === 'Enter') sendChatMessage()">
-                <button onclick="sendChatMessage()" class="text-pgGreen hover:text-white transition px-2"><i class="fa-solid fa-paper-plane"></i></button>
+            <div class="p-2 bg-[#111820] border-t border-pgBorder flex gap-1 rounded-b-lg">
+                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-pgDark text-white text-[10px] px-2 py-1.5 rounded border border-pgBorder outline-none focus:border-pgGreen" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()" class="text-pgGreen hover:text-white px-2"><i class="fa-solid fa-paper-plane text-xs"></i></button>
             </div>
         </div>
-        <button onclick="toggleChat()" class="w-14 h-14 bg-[#2ea043] hover:bg-[#238636] text-black rounded-full shadow-[0_0_15px_rgba(46,160,67,0.5)] transition flex items-center justify-center text-2xl relative">
+        <button onclick="toggleChat()" class="w-12 h-12 bg-pgGreen text-black rounded-full shadow-[0_0_10px_rgba(30,215,96,0.5)] hover:scale-105 transition flex items-center justify-center text-xl">
             <i class="fa-solid fa-comment-dots"></i>
-            <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-[#0d1117]"></span>
         </button>
     </div>
 
     <script>
-        // RENDER API LINK (Do Not Change This)
         const API_BASE = 'https://phishguard-ai-gvor.onrender.com/api'; 
         let currentUrlScore = 0;
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById('view-' + tabName).classList.add('active');
-            document.getElementById('tab-dashboard').className = "w-full flex items-center gap-3 px-3 py-2 hover:bg-[#21262d] rounded transition text-gray-400 hover:text-white border-l-4 border-transparent";
-            document.getElementById('tab-nlp').className = "w-full flex items-center gap-3 px-3 py-2 hover:bg-[#21262d] rounded transition text-gray-400 hover:text-white border-l-4 border-transparent";
-            document.getElementById('tab-' + tabName).className = "w-full flex items-center gap-3 px-3 py-2 bg-[#21262d] rounded text-white border-l-4 border-pgGreen transition";
+            
+            document.getElementById('tab-dashboard').classList.remove('border-pgGreen', 'bg-[#1c2431]');
+            document.getElementById('tab-dashboard').classList.add('border-transparent');
+            document.getElementById('tab-nlp').classList.remove('border-pgGreen', 'bg-[#1c2431]');
+            document.getElementById('tab-nlp').classList.add('border-transparent');
+            
+            document.getElementById('tab-' + tabName).classList.remove('border-transparent');
+            document.getElementById('tab-' + tabName).classList.add('border-pgGreen', 'bg-[#1c2431]');
         }
 
         function updateTerminal(msg, isAlert = false) {
             const term = document.getElementById('terminal');
-            term.innerHTML += `<p class="${isAlert ? 'text-pgRed font-bold' : 'text-pgGreen'}">> ${msg}</p>`;
+            term.innerHTML += `<p class="text-[10px] font-mono ${isAlert ? 'text-pgRed font-bold' : 'text-gray-400'}">> ${msg}</p>`;
             term.scrollTop = term.scrollHeight;
         }
 
@@ -166,7 +214,7 @@
 
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...';
             document.getElementById('terminal').innerHTML = '';
-            updateTerminal(`Initiating Deep Forensics for: ${url}`);
+            updateTerminal(`Target Domain Resolved: ${url}`);
             
             try {
                 const response = await fetch(`${API_BASE}/analyze`, {
@@ -175,25 +223,52 @@
                 const data = await response.json();
                 currentUrlScore = data.score;
                 
-                updateTerminal(`Domain Age Evaluated: ${data.age_days} Days`);
-                updateTerminal(`SSL Check: ${data.ssl}`);
-                updateTerminal(`Calculated ML Entropy Score: ${data.entropy}`);
-                updateTerminal(`Verdict: ${data.status} (Threat Score: ${data.score}/100)`, data.status === 'MALICIOUS');
-
                 const isMal = data.status === 'MALICIOUS';
-                const classCol = isMal ? 'text-pgRed' : 'text-pgGreen';
+                const colClass = isMal ? 'text-pgRed' : 'text-pgGreen';
+                const borderClass = isMal ? 'border-pgRed' : 'border-pgGreen';
+                const bgClass = isMal ? 'bg-pgRed' : 'bg-pgGreen';
+
+                // Update Terminal
+                updateTerminal(`Flags: ${data.global_scanners.split('/')[0]} VT Engines, Keywords: ${data.keywords.length}`);
+                updateTerminal(`Threat Score: ${data.score}/100 -> ${data.status}`, isMal);
+
+                // Update 4 Grid & 2 Grid
+                document.getElementById('ssl-text').innerText = data.ssl;
+                document.getElementById('ssl-text').className = `text-sm font-bold ${data.ssl.includes('VALIDATED') ? 'text-pgGreen' : 'text-pgRed'}`;
+                document.getElementById('ssl-icon').className = `fa-solid ${data.ssl.includes('VALIDATED') ? 'fa-lock text-pgGreen' : 'fa-lock-open text-pgRed'} text-2xl`;
                 
+                document.getElementById('age-text').innerText = `Age: ${data.domain_age} Days | Evaluated`;
+                document.getElementById('age-text').className = `text-[10px] text-center font-bold ${colClass}`;
+                
+                document.getElementById('location-text').innerText = data.server_location;
+                document.getElementById('ip-text').innerText = `IP: ${data.ip_address}`;
+                
+                document.getElementById('keywords-text').innerText = isMal ? `Anomalies: ${data.keywords.join(', ')}` : "Safe - No Anomalies";
+                document.getElementById('keywords-text').className = `text-xs font-bold mt-3 ${colClass}`;
+
+                document.getElementById('av-text').innerText = data.global_scanners;
+                document.getElementById('av-text').className = `text-[10px] font-bold ${colClass}`;
+                
+                document.getElementById('entropy-text').innerText = data.entropy;
+                document.getElementById('entropy-text').className = `text-2xl font-bold ${isMal && data.entropy > 4 ? 'text-pgRed' : 'text-white'}`;
+
+                // Update Main Threat Matrix
                 document.getElementById('score-display').innerText = data.score;
-                document.getElementById('score-display').className = `text-6xl font-bold ${classCol}`;
+                document.getElementById('score-display').className = `text-3xl font-bold ${colClass}`;
                 
                 const badge = document.getElementById('status-badge');
-                badge.innerText = data.status;
-                badge.className = `mt-4 px-6 py-1 rounded-full border border-${isMal ? 'pgRed' : 'pgGreen'} ${classCol} font-bold text-xs tracking-widest bg-${isMal ? 'red-900/20' : 'green-900/20'}`;
+                badge.innerText = `STATUS: ${data.status}`;
+                badge.className = `mt-4 px-8 py-1 border ${borderClass} rounded-full ${colClass} text-xs font-bold tracking-wider`;
                 
-                document.getElementById('matrix-panel').className = `panel p-5 flex flex-col items-center justify-center relative col-span-1 h-56 transition-all duration-500 ${isMal ? 'glow-red' : 'glow-green'}`;
+                const circle = document.getElementById('gauge-circle');
+                circle.className = `absolute w-full h-full rounded-full border-4 border-pgBorder transform -rotate-45 transition-all`;
+                circle.style.borderTopColor = isMal ? '#ff4b4b' : '#1ed760';
+                circle.style.borderRightColor = isMal ? '#ff4b4b' : '#1ed760';
+                
+                document.getElementById('matrix-panel').className = `panel p-4 flex flex-col items-center justify-center relative ${isMal ? 'glow-red' : 'glow-green'}`;
 
             } catch (error) {
-                updateTerminal(`API Connection Failed. Please ensure Render server is live.`, true);
+                updateTerminal(`Error: Could not reach AI Backend.`, true);
             }
             btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Analyze Link';
         }
@@ -201,19 +276,19 @@
         async function generateAIReport() {
             const url = document.getElementById('urlInput').value;
             const output = document.getElementById('report-output');
-            if(!url) return alert("Scan a URL first to generate a report.");
+            if(!url) return;
             
             output.classList.remove('hidden');
-            output.innerHTML = '<span class="text-yellow-500"><i class="fa-solid fa-circle-notch fa-spin"></i> AI Gemini is compiling forensics report...</span>';
+            output.innerHTML = '<span class="text-pgGreen"><i class="fa-solid fa-spinner fa-spin"></i> Gemini is writing report...</span>';
 
             try {
                 const response = await fetch(`${API_BASE}/report`, {
                     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ url: url, score: currentUrlScore })
                 });
                 const data = await response.json();
-                output.innerHTML = `<b class="text-white text-base">Generated SOC Incident Report:</b><br><br>${data.report.replace(/\n/g, '<br>')}`;
+                output.innerHTML = `<span class="text-white font-bold">SOC Report:</span><br>${data.report.replace(/\n/g, '<br>')}`;
             } catch (e) {
-                output.innerHTML = '<span class="text-pgRed">Report Generation Failed. Check Backend/API connectivity.</span>';
+                output.innerHTML = '<span class="text-pgRed">Report Generation Failed.</span>';
             }
         }
 
@@ -222,7 +297,7 @@
             const btn = document.getElementById('nlpBtn');
             if(!text) return;
 
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            btn.innerHTML = 'Analyzing...';
             
             try {
                 const response = await fetch(`${API_BASE}/analyze-email`, {
@@ -234,20 +309,16 @@
                 const classCol = isPanic ? 'text-pgRed' : 'text-pgGreen';
                 
                 document.getElementById('nlp-score').innerText = data.urgency_score + "%";
-                document.getElementById('nlp-score').className = `text-5xl font-bold mb-2 ${classCol}`;
-                
+                document.getElementById('nlp-score').className = `text-4xl font-bold mb-1 ${classCol}`;
                 document.getElementById('nlp-status').innerText = data.status;
-                document.getElementById('nlp-status').className = `text-xs font-bold ${classCol}`;
-                
-                document.getElementById('nlp-panel').className = `border border-[#30363d] rounded p-6 text-center w-64 bg-[#0d1117] transition-all duration-500 ${isPanic ? 'glow-red border-pgRed' : 'glow-green border-pgGreen'}`;
-                document.getElementById('nlp-insight').innerText = isPanic ? 
-                    "🚨 ML detects severe urgency. This is a common psychological tactic used in social engineering to bypass logical thinking. Do not click any links." : 
-                    "✅ The semantic tone appears normal. No immediate high-stress triggers detected.";
+                document.getElementById('nlp-status').className = `text-[10px] font-bold ${classCol}`;
+                document.getElementById('nlp-panel').className = `border ${isPanic ? 'border-pgRed glow-red' : 'border-pgBorder'} rounded p-4 text-center w-48 bg-pgDark`;
+                document.getElementById('nlp-insight').innerText = isPanic ? "High psychological urgency detected." : "Text appears safe.";
 
             } catch (error) {
-                document.getElementById('nlp-insight').innerText = "Failed to reach NLP API server.";
+                document.getElementById('nlp-insight').innerText = "NLP Error.";
             }
-            btn.innerHTML = '<i class="fa-solid fa-microchip"></i> Analyze Sentiment';
+            btn.innerHTML = 'Analyze Sentiment';
         }
 
         function toggleChat() {
@@ -262,7 +333,7 @@
             if(!msg) return;
             
             const chatBox = document.getElementById('chat-messages');
-            chatBox.innerHTML += `<div class="text-right mb-3"><span class="bg-pgGreen text-black p-3 rounded-lg inline-block max-w-[80%] shadow-sm">${msg}</span></div>`;
+            chatBox.innerHTML += `<div class="text-right mb-2"><span class="bg-pgGreen text-black p-1.5 rounded inline-block">${msg}</span></div>`;
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -271,10 +342,10 @@
                     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: msg })
                 });
                 const data = await response.json();
-                chatBox.innerHTML += `<div class="mb-3"><span class="bg-[#21262d] text-white p-3 rounded-lg inline-block border border-pgGreen/30 max-w-[90%] shadow-sm">${data.reply}</span></div>`;
+                chatBox.innerHTML += `<div class="mb-2"><span class="bg-[#1c2431] text-white p-1.5 rounded inline-block border border-pgBorder">${data.reply}</span></div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (error) {
-                chatBox.innerHTML += `<div class="mb-3"><span class="bg-red-900/50 text-white p-3 rounded-lg inline-block border border-red-500">System Offline. Check server connection.</span></div>`;
+                chatBox.innerHTML += `<div class="mb-2"><span class="text-pgRed">Offline.</span></div>`;
             }
         }
     </script>
