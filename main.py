@@ -1,26 +1,35 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import google.generativeai as genai
 from textblob import TextBlob
 import math
 import random
+import urllib.request
+import json
 
 app = Flask(__name__)
 CORS(app) 
 
 # ==========================================
-# 🧠 AI CONFIGURATION (404 ERROR FIXED)
+# 🧠 DIRECT AI API BYPASS (No SDK Needed)
 # ==========================================
 GEMINI_API_KEY = "AIzaSyA9trqBMSf37pfRyIITnC6H_t2oUGFvF8c" 
-genai.configure(api_key=GEMINI_API_KEY)
 
-try:
-    # UPDATED to latest stable model to fix 404 error
-    gemini_model = genai.GenerativeModel('gemini-1.5-flash')
-except Exception as e:
-    gemini_model = None
-    print(f"AI Error: {e}")
+def call_gemini_api(prompt):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+    data = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode('utf-8')
+    req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'})
+    
+    try:
+        with urllib.request.urlopen(req) as response:
+            res_body = response.read()
+            res_json = json.loads(res_body.decode('utf-8'))
+            return res_json['candidates'][0]['content']['parts'][0]['text']
+    except Exception as e:
+        return f"AI Engine Bypass Error: {str(e)}"
 
+# ==========================================
+# 📊 ML CORE
+# ==========================================
 def calculate_entropy(text):
     if not text: return 0
     entropy = 0
@@ -76,27 +85,18 @@ def generate_report():
     data = request.json
     url = data.get('url', 'Unknown')
     score = data.get('score', 0)
+    prompt = f"Act as an expert SOC Analyst. Write a highly technical 3-bullet Incident Report for the URL '{url}' with a Threat Score of {score}/100. Mention risks clearly and concisely."
     
-    if not gemini_model: return jsonify({"report": "API Error: AI Engine is offline."})
-    
-    prompt = f"Act as an expert SOC Analyst. Write a short, highly technical 3-bullet Incident Report for the URL '{url}' with a Threat Score of {score}/100. Highlight risks clearly."
-    try:
-        response = gemini_model.generate_content(prompt)
-        return jsonify({"report": response.text})
-    except Exception as e:
-        return jsonify({"report": f"AI Engine Failed: {str(e)}"})
+    ai_response = call_gemini_api(prompt)
+    return jsonify({"report": ai_response})
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
     message = request.json.get('message', '')
-    if not gemini_model: return jsonify({"reply": "System Offline: AI core not reachable."})
+    prompt = f"You are PhishGuard Copilot, an expert cybersecurity assistant. Answer concisely in 1 or 2 sentences to this query: {message}"
     
-    prompt = f"You are PhishGuard Copilot, an expert cybersecurity assistant. Answer concisely in 2 sentences to this user query: {message}"
-    try:
-        response = gemini_model.generate_content(prompt)
-        return jsonify({"reply": response.text})
-    except Exception as e:
-        return jsonify({"reply": "Network interruption connecting to AI."})
+    ai_response = call_gemini_api(prompt)
+    return jsonify({"reply": ai_response})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

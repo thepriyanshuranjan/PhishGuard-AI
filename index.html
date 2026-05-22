@@ -10,41 +10,44 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { bgMain: '#091117', bgPanel: '#121e26', pgGreen: '#00d26a', pgBorder: '#1a2b36' }
+                    colors: { bgMain: '#0b1116', bgPanel: '#131e26', pgGreen: '#00d26a', pgBorder: '#1f2e3a' }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #091117; color: #8b949e; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
-        .panel { background-color: #121e26; border: 1px solid #1a2b36; border-radius: 8px; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #1a2b36; border-radius: 4px; }
+        body { background-color: #0b1116; color: #8b949e; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+        .panel { background-color: #131e26; border: 1px solid #1f2e3a; border-radius: 8px; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #1f2e3a; border-radius: 4px; }
         
-        /* Threat Gauge Fixed */
-        .circular-chart { display: block; margin: 0 auto; max-width: 110px; max-height: 110px; }
-        .circle-bg { fill: none; stroke: #1a2b36; stroke-width: 3.8; }
-        .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
-        .percentage { fill: #fff; font-size: 0.6em; text-anchor: middle; font-weight: bold; }
-        .sub-text { fill: #8b949e; font-size: 0.25em; text-anchor: middle; }
+        .circular-chart { display: block; margin: 0 auto; max-width: 120px; max-height: 120px; }
+        .circle-bg { fill: none; stroke: #1f2e3a; stroke-width: 3.5; }
+        .circle { fill: none; stroke-width: 3.5; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
+        .percentage { fill: #fff; font-size: 0.5em; text-anchor: middle; font-weight: bold; }
+        .sub-text { fill: #8b949e; font-size: 0.2em; text-anchor: middle; }
         
-        /* Tabs Logic */
         .tab-content { display: none !important; }
         .tab-content.active { display: flex !important; }
+
+        /* Chatbox Custom Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .chat-msg { animation: fadeIn 0.3s ease-out; }
     </style>
 </head>
 <body class="flex h-screen text-xs">
 
-    <aside class="w-64 panel flex flex-col m-2 border-r border-pgBorder bg-bgMain rounded-none border-t-0 border-b-0 border-l-0">
+    <!-- SIDEBAR -->
+    <aside class="w-64 panel flex flex-col m-3 border-r border-pgBorder bg-bgMain rounded-none border-t-0 border-b-0 border-l-0">
         <div class="p-5 border-b border-pgBorder flex items-center gap-3">
-            <i class="fa-solid fa-shield-halved text-pgGreen text-3xl"></i>
+            <i class="fa-solid fa-shield-halved text-pgGreen text-3xl drop-shadow-[0_0_8px_rgba(0,210,106,0.6)]"></i>
             <div>
-                <h1 class="font-bold text-white text-sm leading-tight">PhishGuard</h1>
+                <h1 class="font-bold text-white text-sm">PhishGuard</h1>
                 <p class="text-[8px] text-gray-400">ENTERPRISE COMMAND CENTER</p>
             </div>
         </div>
         <nav class="flex-1 p-3 space-y-1">
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="w-full flex items-center gap-3 p-3 bg-bgPanel border-l-4 border-pgGreen text-white rounded transition">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="w-full flex items-center gap-3 p-3 bg-bgPanel border-l-4 border-pgGreen text-white rounded transition shadow-sm">
                 <i class="fa-solid fa-table-columns w-5 text-pgGreen"></i>
                 <div class="text-left"><p class="font-bold text-xs">Dashboard</p><p class="text-[9px] text-gray-500">Current URL Scanner</p></div>
             </button>
@@ -52,41 +55,42 @@
                 <i class="fa-regular fa-envelope w-5"></i>
                 <div class="text-left"><p class="font-bold text-xs">Email Sentiment</p><p class="text-[9px] text-gray-500">NLP view</p></div>
             </button>
-            <button onclick="switchTab('adv')" id="btn-adv" class="w-full flex items-center gap-3 p-3 hover:bg-bgPanel border-l-4 border-transparent text-gray-400 hover:text-white rounded transition">
-                <i class="fa-solid fa-atom w-5"></i>
-                <div class="text-left"><p class="font-bold text-xs">Advanced AI</p><p class="text-[9px] text-gray-500">New view</p></div>
-            </button>
         </nav>
     </aside>
 
-    <main class="flex-1 flex flex-col p-2 h-full overflow-y-auto relative">
+    <!-- MAIN WINDOW -->
+    <main class="flex-1 flex flex-col p-3 h-full overflow-y-auto relative">
         
-        <header class="panel mb-3 flex justify-between items-center p-3 px-5">
+        <!-- HEADER -->
+        <header class="panel mb-4 flex justify-between items-center p-3 px-5 shadow-sm">
             <div class="flex items-center gap-2 text-[10px] text-red-500 font-bold tracking-widest"><div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div> GLOBAL INTEL FEED</div>
-            <div class="text-[10px] text-gray-500 truncate text-center flex-1 mx-4">[ALERT] Zero-day MFA bypass targeting Financial sectors | [INTEL] Hackers targeting regional banks</div>
+            <div class="text-[10px] text-gray-500 truncate text-center flex-1 mx-4">[ALERT] Zero-day MFA bypass targeting Financial sectors</div>
             <div class="flex items-center gap-4 text-[10px]">
-                <span class="text-pgGreen border border-pgGreen px-3 py-1 rounded-full"><i class="fa-solid fa-satellite-dish"></i> AP-SOUTH-1 NODE</span>
+                <span class="text-pgGreen border border-pgGreen px-3 py-1 rounded-full bg-pgGreen/10"><i class="fa-solid fa-satellite-dish"></i> AP-SOUTH-1 NODE</span>
                 <div class="flex items-center gap-2 text-white">
-                    <div class="bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center font-bold">SA</div> Security Analyst <i class="fa-solid fa-circle-check text-pgGreen"></i>
+                    <div class="bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-lg">SA</div> Security Analyst <i class="fa-solid fa-circle-check text-pgGreen"></i>
                 </div>
             </div>
         </header>
 
+        <!-- =================== TAB 1: DASHBOARD =================== -->
         <div id="view-dashboard" class="tab-content active flex-col flex-1">
             
-            <div class="flex gap-3 mb-3">
-                <div class="flex-1 panel flex items-center px-4 bg-bgMain border-pgBorder focus-within:border-pgGreen transition">
+            <!-- Input Area -->
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1 panel flex items-center px-4 bg-bgMain border-pgBorder focus-within:border-pgGreen transition shadow-inner">
                     <i class="fa-solid fa-link text-gray-500 mr-3"></i>
-                    <input type="text" id="urlInput" placeholder="Enter URL here... (e.g., www.youtube.com)" class="bg-transparent w-full p-2.5 outline-none text-white text-sm">
+                    <input type="text" id="urlInput" placeholder="Enter URL here... (e.g., https://instagram.com)" class="bg-transparent w-full p-3 outline-none text-white text-sm">
                 </div>
-                <button onclick="analyzeURL()" id="analyzeBtn" class="bg-pgGreen hover:bg-[#00b35a] text-black px-8 py-2.5 rounded font-bold transition flex items-center gap-2 text-sm shadow-[0_0_15px_rgba(0,210,106,0.2)]">
+                <button onclick="analyzeURL()" id="analyzeBtn" class="bg-pgGreen hover:bg-[#00b35a] text-black px-8 py-3 rounded font-bold transition flex items-center gap-2 text-sm shadow-[0_0_20px_rgba(0,210,106,0.3)]">
                     <i class="fa-solid fa-magnifying-glass"></i> Analyze Link
                 </button>
             </div>
 
-            <div class="grid grid-cols-4 gap-3 mb-3">
-                <div class="flex flex-col gap-3">
-                    <div class="panel p-4 h-full">
+            <!-- 4 Grid Stats -->
+            <div class="grid grid-cols-4 gap-4 mb-4">
+                <div class="flex flex-col gap-4">
+                    <div class="panel p-4 h-full shadow-sm">
                         <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-lock text-pgGreen mr-1"></i> SSL CHECK</h3>
                         <p class="text-[8px] text-gray-500 mb-3">Encryption status.</p>
                         <div class="flex items-center gap-3">
@@ -94,148 +98,138 @@
                             <div><p id="ssl-text" class="text-sm font-bold text-pgGreen">VALIDATED</p></div>
                         </div>
                     </div>
-                    <div class="panel p-4 h-full">
+                    <div class="panel p-4 h-full shadow-sm">
                         <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-star text-pgGreen mr-1"></i> GLOBAL SCANNERS</h3>
-                        <p class="text-[8px] text-gray-500 mb-3">Cross-check against AV engines.</p>
-                        <div class="flex gap-1 mb-2">
+                        <div class="flex gap-1 mb-2 mt-3">
                             <div class="w-6 h-1.5 bg-pgGreen rounded"></div><div class="w-6 h-1.5 bg-pgGreen rounded"></div><div class="w-6 h-1.5 bg-pgGreen rounded"></div><div class="w-6 h-1.5 bg-gray-700 rounded"></div>
                         </div>
-                        <p id="av-text" class="text-[10px] text-pgGreen font-bold">--/94 Engines Flagged</p>
+                        <p id="av-text" class="text-[10px] text-pgGreen font-bold">0/94 Engines Flagged</p>
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-3">
-                    <div class="panel p-4 h-full">
+                <div class="flex flex-col gap-4">
+                    <div class="panel p-4 h-full shadow-sm">
                         <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-shield-halved text-pgGreen mr-1"></i> DOMAIN AGE</h3>
-                        <p class="text-[8px] text-gray-500 mb-3">Scams are usually brand new.</p>
-                        <div class="w-full bg-bgMain h-2 rounded-full mb-2"><div class="bg-pgGreen h-2 rounded-full w-[95%]"></div></div>
-                        <p id="age-text" class="text-[10px] text-pgGreen font-bold text-center">Age: -- Days</p>
+                        <div class="w-full bg-bgMain h-2 rounded-full mb-2 mt-4"><div class="bg-pgGreen h-2 rounded-full w-[95%] shadow-[0_0_8px_rgba(0,210,106,0.6)]"></div></div>
+                        <p id="age-text" class="text-[10px] text-pgGreen font-bold text-center">Age: 1859 Days</p>
                     </div>
-                    <div class="panel p-4 h-full">
+                    <div class="panel p-4 h-full shadow-sm">
                         <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-chart-line text-pgGreen mr-1"></i> RANDOMNESS</h3>
-                        <p class="text-[8px] text-gray-500 mb-3">High score = suspicious.</p>
-                        <p id="entropy-text" class="text-3xl font-bold text-white mb-2">0.00</p>
+                        <p id="entropy-text" class="text-3xl font-bold text-white mt-3">3.45</p>
                     </div>
                 </div>
 
-                <div class="panel p-4 flex flex-col relative overflow-hidden bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-no-repeat bg-center bg-contain bg-blend-overlay">
+                <div class="panel p-4 flex flex-col relative overflow-hidden shadow-sm bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-no-repeat bg-center bg-contain bg-blend-overlay opacity-90">
                     <div class="relative z-10 p-1">
                         <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-globe text-pgGreen mr-1"></i> SERVER LOCATION</h3>
-                        <p class="text-[8px] text-gray-500 mb-4">Location where website is stored.</p>
-                        <p id="loc-text" class="text-sm text-white font-bold mt-10">--</p>
-                        <p id="ip-text" class="text-[10px] text-pgGreen mt-1 font-mono">IP: --</p>
+                        <p id="loc-text" class="text-sm text-white font-bold mt-12">United States (US)</p>
+                        <p id="ip-text" class="text-[10px] text-pgGreen mt-1 font-mono">IP: 198.232.41.32</p>
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-3">
-                    <div class="panel p-4 h-full">
+                <div class="flex flex-col gap-4">
+                    <div class="panel p-4 h-full shadow-sm">
                         <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-triangle-exclamation text-pgGreen mr-1"></i> SUSPICIOUS WORDS</h3>
-                        <p class="text-[8px] text-gray-500 mb-3">Scans for trap words.</p>
-                        <p id="keyword-text1" class="text-xs font-bold text-pgGreen mt-2">Safe - No Anomalies</p>
+                        <p id="keyword-text1" class="text-xs font-bold text-pgGreen mt-4">Safe - No Anomalies</p>
                     </div>
-                    <div class="panel p-4 h-full">
+                    <div class="panel p-4 h-full shadow-sm">
                         <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-1"><i class="fa-solid fa-ban text-pgGreen mr-1"></i> BLACKLIST STATUS</h3>
-                        <p class="text-[8px] text-gray-500 mb-3">Checks malware databases.</p>
-                        <p id="keyword-text2" class="text-xs font-bold text-pgGreen mt-2">Not Blacklisted</p>
+                        <p id="keyword-text2" class="text-xs font-bold text-pgGreen mt-4">Not Blacklisted</p>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 flex-1 pb-2">
-                <div class="panel p-4 flex flex-col relative items-center justify-center col-span-1">
-                    <h3 class="absolute top-3 left-4 text-[9px] text-gray-400 font-bold uppercase">FINAL THREAT MATRIX</h3>
-                    <span class="absolute top-3 right-4 text-[8px] text-pgGreen flex items-center gap-1"><div class="w-1.5 h-1.5 bg-pgGreen rounded-full animate-pulse"></div> LIVE DATA</span>
+            <!-- Bottom Section -->
+            <div class="grid grid-cols-3 gap-4 flex-1 pb-2">
+                <!-- Threat Matrix Gauge -->
+                <div class="panel p-4 flex flex-col relative items-center justify-center col-span-1 shadow-sm">
+                    <h3 class="absolute top-4 left-4 text-[9px] text-gray-400 font-bold uppercase">FINAL THREAT MATRIX</h3>
+                    <span class="absolute top-4 right-4 text-[8px] text-pgGreen flex items-center gap-1"><div class="w-1.5 h-1.5 bg-pgGreen rounded-full animate-pulse"></div> LIVE DATA</span>
                     
-                    <svg viewBox="0 0 36 36" class="circular-chart mt-4">
+                    <svg viewBox="0 0 36 36" class="circular-chart mt-4 drop-shadow-md">
                         <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path id="gauge-circle" class="circle" style="stroke: #00d26a;" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <text id="score-display" x="18" y="20.35" class="percentage">0</text>
+                        <path id="gauge-circle" class="circle" style="stroke: #00d26a;" stroke-dasharray="35, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <text id="score-display" x="18" y="20.35" class="percentage">35</text>
                         <text x="18" y="24" class="sub-text">/ 100</text>
                     </svg>
                     
-                    <div id="status-badge" class="mt-4 px-8 py-1 border border-pgGreen rounded-full text-pgGreen text-[10px] font-bold tracking-wider">STATUS: SAFE</div>
+                    <div id="status-badge" class="mt-6 px-8 py-1.5 border border-pgGreen rounded-full text-pgGreen text-[10px] font-bold tracking-wider">STATUS: SAFE</div>
                 </div>
 
-                <div class="panel bg-bgMain flex flex-col p-4 col-span-1">
-                    <div class="flex-1 font-mono text-[10px] text-gray-400 overflow-y-auto" id="terminal">
+                <!-- Terminal -->
+                <div class="panel bg-bgMain flex flex-col p-4 col-span-1 shadow-inner">
+                    <div class="flex-1 font-mono text-[11px] text-gray-400 overflow-y-auto leading-relaxed" id="terminal">
                         <p class="text-pgGreen">> System Initialized.</p>
                         <p>> Awaiting target domain resolution...</p>
                     </div>
                 </div>
 
-                <div class="panel p-4 flex flex-col col-span-1">
-                    <button onclick="generateAIReport()" class="w-full bg-bgMain border border-pgGreen text-pgGreen hover:bg-pgGreen hover:text-black py-2 rounded text-[10px] font-bold transition flex justify-center items-center gap-2 mb-3">
+                <!-- Report Section -->
+                <div class="panel p-4 flex flex-col col-span-1 shadow-sm">
+                    <button onclick="generateAIReport()" class="w-full bg-bgMain border border-pgGreen text-pgGreen hover:bg-pgGreen hover:text-black py-2.5 rounded text-[10px] font-bold transition flex justify-center items-center gap-2 mb-4 shadow-[0_0_10px_rgba(0,210,106,0.1)]">
                         <i class="fa-solid fa-file-invoice"></i> Generate AI Incident Report
                     </button>
-                    <div id="report-output" class="text-[9px] text-gray-300 bg-bgMain p-3 border border-pgBorder rounded mb-3 hidden overflow-y-auto flex-1"></div>
+                    <div id="report-output" class="text-[10px] text-gray-300 bg-bgMain p-4 border border-pgBorder rounded mb-3 hidden overflow-y-auto flex-1 leading-relaxed shadow-inner"></div>
                     
-                    <h3 id="scan-hist-title" class="text-[9px] text-gray-400 font-bold uppercase mb-2 border-b border-pgBorder pb-1">SCAN HISTORY</h3>
-                    <div id="scan-hist-body" class="space-y-1.5 text-[9px] text-gray-500 overflow-y-auto">
-                        <p class="truncate">https://www.instagram.com</p>
-                        <p class="truncate">https://www.youtube.com</p>
-                        <p class="truncate">http://login-secure-update.com</p>
+                    <div id="scan-hist-container" class="flex-1">
+                        <h3 class="text-[9px] text-gray-400 font-bold uppercase mb-3 border-b border-pgBorder pb-1">SCAN HISTORY</h3>
+                        <div class="space-y-2 text-[10px] text-gray-500 overflow-y-auto">
+                            <p class="truncate hover:text-pgGreen cursor-pointer transition"><i class="fa-solid fa-clock-rotate-left mr-1"></i> https://www.instagram.com</p>
+                            <p class="truncate hover:text-pgGreen cursor-pointer transition"><i class="fa-solid fa-clock-rotate-left mr-1"></i> https://www.youtube.com</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="view-nlp" class="tab-content flex-col flex-1 p-6 panel">
-            <h2 class="text-lg font-bold text-white mb-2"><i class="fa-solid fa-brain text-pgGreen mr-2"></i> Email Sentiment (NLP)</h2>
-            <textarea id="nlpInput" placeholder="Paste suspicious email/SMS text here..." class="w-full h-32 bg-bgMain border border-pgBorder p-3 text-white text-sm outline-none focus:border-pgGreen rounded mb-4 resize-none"></textarea>
-            <button onclick="analyzeEmail()" id="nlpBtn" class="bg-pgGreen hover:bg-[#00b35a] text-black px-6 py-2 rounded text-sm font-bold w-48 mb-6 shadow-[0_0_10px_rgba(0,210,106,0.2)]">Analyze Sentiment</button>
-            <div class="border border-pgBorder rounded p-5 text-center w-64 bg-bgMain">
-                <h3 class="text-xs text-gray-400 font-bold mb-2">URGENCY SCORE</h3>
-                <p id="nlp-score" class="text-5xl font-bold text-white mb-2">0%</p>
-                <p id="nlp-status" class="text-xs font-bold text-gray-500">AWAITING TEXT</p>
+        <!-- =================== TAB 2: EMAIL SENTIMENT =================== -->
+        <div id="view-nlp" class="tab-content flex-col flex-1 p-6 panel shadow-sm">
+            <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-brain text-pgGreen mr-2"></i> Email Sentiment (NLP)</h2>
+            <textarea id="nlpInput" placeholder="Paste suspicious email/SMS text here..." class="w-full h-40 bg-bgMain border border-pgBorder p-4 text-white text-sm outline-none focus:border-pgGreen rounded mb-6 resize-none shadow-inner"></textarea>
+            <button onclick="analyzeEmail()" id="nlpBtn" class="bg-pgGreen hover:bg-[#00b35a] text-black px-8 py-3 rounded text-sm font-bold w-48 mb-8 shadow-[0_0_15px_rgba(0,210,106,0.3)] transition">Analyze Sentiment</button>
+            <div class="border border-pgBorder rounded-lg p-6 text-center w-72 bg-bgMain shadow-sm">
+                <h3 class="text-xs text-gray-400 font-bold mb-3">URGENCY SCORE</h3>
+                <p id="nlp-score" class="text-6xl font-bold text-white mb-3">0%</p>
+                <p id="nlp-status" class="text-xs font-bold text-gray-500 tracking-wider">AWAITING TEXT</p>
             </div>
-        </div>
-
-        <div id="view-adv" class="tab-content flex-col flex-1 p-6 panel items-center justify-center">
-            <i class="fa-solid fa-atom text-4xl text-gray-600 mb-4"></i>
-            <p class="text-gray-400 text-sm">Advanced AI Analysis module coming soon.</p>
         </div>
 
     </main>
 
+    <!-- FLOATING CHATBOT -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        <div id="chat-window" class="panel w-80 mb-3 hidden flex-col shadow-2xl border border-pgBorder">
-            <div class="bg-bgPanel p-3 border-b border-pgBorder flex justify-between items-center rounded-t-lg">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-shield text-pgGreen text-sm"></i><span class="font-bold text-xs text-white">PhishGuard Copilot</span></div>
-                <i class="fa-solid fa-xmark cursor-pointer text-gray-400 hover:text-white" onclick="toggleChat()"></i>
+        <div id="chat-window" class="panel w-80 mb-4 hidden flex-col shadow-2xl border border-pgBorder rounded-xl overflow-hidden">
+            <div class="bg-bgPanel p-4 border-b border-pgBorder flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-2"><i class="fa-solid fa-shield text-pgGreen text-base drop-shadow-[0_0_5px_rgba(0,210,106,0.8)]"></i><span class="font-bold text-sm text-white tracking-wide">PhishGuard Copilot</span></div>
+                <i class="fa-solid fa-xmark cursor-pointer text-gray-400 hover:text-white transition text-lg" onclick="toggleChat()"></i>
             </div>
-            <div id="chat-messages" class="h-64 overflow-y-auto p-3 text-[11px] space-y-3 bg-bgMain">
-                <div class="bg-bgPanel text-gray-300 p-2.5 rounded border border-pgBorder text-left w-[85%]">Hello, I am your PhishGuard Copilot. How can I assist with your investigation today?</div>
+            <div id="chat-messages" class="h-72 overflow-y-auto p-4 text-xs space-y-4 bg-bgMain">
+                <div class="chat-msg bg-bgPanel text-gray-300 p-3 rounded-lg rounded-tl-none border border-pgBorder text-left w-[85%] leading-relaxed shadow-sm">Hello, I am your PhishGuard Copilot. How can I assist with your investigation today?</div>
             </div>
-            <div class="p-2 bg-bgPanel border-t border-pgBorder flex gap-2 rounded-b-lg">
-                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-bgMain text-white text-[11px] px-3 py-2 rounded-full border border-pgBorder outline-none focus:border-pgGreen" onkeypress="if(event.key === 'Enter') sendChatMessage()">
-                <button onclick="sendChatMessage()" class="text-pgGreen hover:text-white px-2"><i class="fa-solid fa-paper-plane"></i></button>
+            <div class="p-3 bg-bgPanel border-t border-pgBorder flex gap-2">
+                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-bgMain text-white text-xs px-4 py-2.5 rounded-full border border-pgBorder outline-none focus:border-pgGreen transition shadow-inner" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()" class="text-pgGreen hover:text-white px-3 transition"><i class="fa-solid fa-paper-plane text-lg"></i></button>
             </div>
         </div>
-        <button onclick="toggleChat()" class="w-12 h-12 bg-pgGreen text-black rounded-full shadow-[0_0_15px_rgba(0,210,106,0.3)] hover:scale-105 transition flex items-center justify-center text-xl relative">
+        <button onclick="toggleChat()" class="w-14 h-14 bg-pgGreen text-black rounded-full shadow-[0_0_20px_rgba(0,210,106,0.5)] hover:scale-105 transition-transform flex items-center justify-center text-2xl relative">
             <i class="fa-solid fa-comment-dots"></i>
-            <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-white rounded-full border-2 border-bgMain"></span>
+            <span class="absolute top-0 right-0 w-3 h-3 bg-white rounded-full border-2 border-bgMain"></span>
         </button>
     </div>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         const API_BASE = 'https://phishguard-ai-gvor.onrender.com/api'; 
-        let currentUrlScore = 0;
+        let currentUrlScore = 35; // Default to match screenshot
 
-        // FIXED TABS LOGIC
         function switchTab(tabName) {
-            // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            // Reset all sidebar buttons
             document.querySelectorAll('aside button').forEach(b => {
                 b.classList.remove('bg-bgPanel', 'border-pgGreen', 'text-white');
                 b.classList.add('border-transparent', 'text-gray-400');
                 b.querySelector('i').classList.remove('text-pgGreen');
             });
-            
-            // Show requested tab
             document.getElementById('view-' + tabName).classList.add('active');
-            
-            // Highlight requested button
             const activeBtn = document.getElementById('btn-' + tabName);
             activeBtn.classList.remove('border-transparent', 'text-gray-400');
             activeBtn.classList.add('bg-bgPanel', 'border-pgGreen', 'text-white');
@@ -244,7 +238,7 @@
 
         function updateTerminal(msg, isAlert = false) {
             const term = document.getElementById('terminal');
-            term.innerHTML += `<p class="${isAlert ? 'text-red-500 font-bold' : 'text-gray-400'}">> ${msg}</p>`;
+            term.innerHTML += `<p class="${isAlert ? 'text-red-500 font-bold' : 'text-gray-400'} mt-1">> ${msg}</p>`;
             term.scrollTop = term.scrollHeight;
         }
 
@@ -273,38 +267,33 @@
                 updateTerminal(`Flags: ${data.keywords.length > 0 && data.keywords[0] !== 'None' ? data.keywords.length : 0} Anomaly Keywords Detected`);
                 updateTerminal(`Threat Score: ${data.score}/100 -> ${data.status}`, isMal);
 
-                // Update Panels
                 document.getElementById('ssl-text').innerText = data.ssl;
                 document.getElementById('ssl-text').className = `text-sm font-bold ${data.ssl.includes('VALIDATED') ? 'text-pgGreen' : 'text-red-500'}`;
-                document.getElementById('ssl-icon').className = `fa-solid ${data.ssl.includes('VALIDATED') ? 'fa-lock text-pgGreen' : 'fa-lock-open text-red-500'} text-3xl`;
+                document.getElementById('ssl-icon').className = `fa-solid ${data.ssl.includes('VALIDATED') ? 'fa-lock text-pgGreen' : 'fa-lock-open text-red-500'} text-3xl drop-shadow-sm`;
                 
                 document.getElementById('age-text').innerText = `Age: ${data.domain_age} Days | Evaluated`;
                 document.getElementById('age-text').className = `text-[10px] font-bold text-center ${colorClass}`;
-                
                 document.getElementById('loc-text').innerText = data.server_location;
                 document.getElementById('ip-text').innerText = `IP: ${data.ip_address}`;
-                
                 document.getElementById('av-text').innerText = data.global_scanners;
                 document.getElementById('av-text').className = `text-[10px] font-bold ${colorClass}`;
-                
                 document.getElementById('entropy-text').innerText = data.entropy;
-                document.getElementById('entropy-text').className = `text-3xl font-bold mb-2 ${isMal && data.entropy > 4 ? 'text-red-500' : 'text-white'}`;
+                document.getElementById('entropy-text').className = `text-3xl font-bold mt-3 ${isMal && data.entropy > 4 ? 'text-red-500' : 'text-white'}`;
 
                 document.getElementById('keyword-text1').innerText = isMal ? `Flags: ${data.keywords.join(', ')}` : "Safe - No Anomalies";
-                document.getElementById('keyword-text1').className = `text-xs font-bold mt-2 ${colorClass}`;
+                document.getElementById('keyword-text1').className = `text-xs font-bold mt-4 ${colorClass}`;
                 document.getElementById('keyword-text2').innerText = isMal ? "Warning - Flagged" : "Not Blacklisted";
-                document.getElementById('keyword-text2').className = `text-xs font-bold mt-2 ${colorClass}`;
+                document.getElementById('keyword-text2').className = `text-xs font-bold mt-4 ${colorClass}`;
 
-                // FIX: Update Threat Matrix Gauge
+                // Gauge Matrix Fix
                 document.getElementById('score-display').textContent = data.score;
                 const circle = document.getElementById('gauge-circle');
-                // The correct format to set stroke-dasharray dynamically
                 circle.setAttribute('stroke-dasharray', `${data.score}, 100`);
                 circle.style.stroke = hexColor;
                 
                 const badge = document.getElementById('status-badge');
                 badge.innerText = `STATUS: ${data.status}`;
-                badge.className = `mt-4 px-8 py-1 border ${borderClass} rounded-full ${colorClass} text-[10px] font-bold tracking-wider`;
+                badge.className = `mt-6 px-8 py-1.5 border ${borderClass} rounded-full ${colorClass} text-[10px] font-bold tracking-wider bg-${isMal ? 'red-900/10' : 'green-900/10'}`;
 
             } catch (error) {
                 updateTerminal(`Error: Could not reach Backend Server.`, true);
@@ -313,24 +302,21 @@
         }
 
         async function generateAIReport() {
-            const url = document.getElementById('urlInput').value;
+            const url = document.getElementById('urlInput').value || 'example.com';
             const output = document.getElementById('report-output');
             
-            if(!url) return;
-            
-            document.getElementById('scan-hist-title').classList.add('hidden');
-            document.getElementById('scan-hist-body').classList.add('hidden');
+            document.getElementById('scan-hist-container').classList.add('hidden');
             output.classList.remove('hidden');
-            output.innerHTML = '<span class="text-pgGreen"><i class="fa-solid fa-spinner fa-spin"></i> Compiling SOC Report...</span>';
+            output.innerHTML = '<span class="text-pgGreen animate-pulse"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Compiling SOC Report via Google AI...</span>';
 
             try {
                 const response = await fetch(`${API_BASE}/report`, {
                     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ url: url, score: currentUrlScore })
                 });
                 const data = await response.json();
-                output.innerHTML = `<span class="text-white font-bold mb-1 block">Incident Summary:</span>${data.report.replace(/\n/g, '<br>')}`;
+                output.innerHTML = `<span class="text-white font-bold mb-2 block border-b border-pgBorder pb-1">AI Incident Summary:</span><div class="text-gray-300">${data.report.replace(/\n/g, '<br>')}</div>`;
             } catch (e) {
-                output.innerHTML = '<span class="text-red-500">Failed to generate AI report. Check server logs.</span>';
+                output.innerHTML = '<span class="text-red-500"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Failed to generate AI report.</span>';
             }
         }
 
@@ -339,7 +325,7 @@
             const btn = document.getElementById('nlpBtn');
             if(!text) return;
 
-            btn.innerHTML = 'Analyzing...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analyzing...';
             try {
                 const response = await fetch(`${API_BASE}/analyze-email`, {
                     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ text: text })
@@ -350,9 +336,9 @@
                 const color = isPanic ? 'text-red-500' : 'text-pgGreen';
                 
                 document.getElementById('nlp-score').innerText = data.urgency_score + "%";
-                document.getElementById('nlp-score').className = `text-5xl font-bold mb-2 ${color}`;
+                document.getElementById('nlp-score').className = `text-6xl font-bold mb-3 ${color}`;
                 document.getElementById('nlp-status').innerText = data.status;
-                document.getElementById('nlp-status').className = `text-xs font-bold ${color}`;
+                document.getElementById('nlp-status').className = `text-xs font-bold tracking-wider ${color}`;
             } catch (error) {
                 document.getElementById('nlp-status').innerText = "ERROR CONNECTING";
             }
@@ -371,8 +357,11 @@
             if(!msg) return;
             
             const chatBox = document.getElementById('chat-messages');
-            chatBox.innerHTML += `<div class="text-right mb-3"><span class="bg-pgGreen text-black p-2 rounded inline-block text-left shadow-sm">${msg}</span></div>`;
+            chatBox.innerHTML += `<div class="text-right mb-4 chat-msg"><span class="bg-pgGreen text-black p-3 rounded-lg rounded-tr-none inline-block text-left shadow-sm">${msg}</span></div>`;
             input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            chatBox.innerHTML += `<div id="typing" class="mb-4 chat-msg"><span class="bg-bgPanel text-gray-500 p-3 rounded-lg rounded-tl-none inline-block border border-pgBorder"><i class="fa-solid fa-ellipsis fa-fade"></i> AI is thinking...</span></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
@@ -380,10 +369,12 @@
                     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: msg })
                 });
                 const data = await response.json();
-                chatBox.innerHTML += `<div class="mb-3"><span class="bg-bgPanel text-gray-300 p-2.5 rounded inline-block border border-pgBorder text-left w-[85%]">${data.reply}</span></div>`;
+                document.getElementById('typing').remove();
+                chatBox.innerHTML += `<div class="mb-4 chat-msg"><span class="bg-bgPanel text-gray-300 p-3 rounded-lg rounded-tl-none inline-block border border-pgBorder text-left w-[85%] leading-relaxed shadow-sm">${data.reply.replace(/\n/g, '<br>')}</span></div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (error) {
-                chatBox.innerHTML += `<div class="mb-3"><span class="text-red-500 bg-red-900/20 p-2 rounded border border-red-500">System Offline. Connection Failed.</span></div>`;
+                document.getElementById('typing').remove();
+                chatBox.innerHTML += `<div class="mb-4 chat-msg"><span class="text-red-500 bg-red-900/20 p-3 rounded-lg rounded-tl-none border border-red-500 inline-block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Connection Failed.</span></div>`;
             }
         }
     </script>
