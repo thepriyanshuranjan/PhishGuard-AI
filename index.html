@@ -23,45 +23,57 @@
         
         .circular-chart { display: block; margin: 0 auto; max-width: 120px; max-height: 120px; }
         .circle-bg { fill: none; stroke: #1f2e3a; stroke-width: 3.5; }
-        .circle { fill: none; stroke-width: 3.5; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
+        .circle { fill: none; stroke-width: 3.5; stroke-linecap: round; transition: stroke-dasharray 1.2s ease-out; }
         .percentage { fill: #fff; font-size: 0.5em; text-anchor: middle; font-weight: bold; }
         .sub-text { fill: #8b949e; font-size: 0.2em; text-anchor: middle; }
         
         .tab-content { display: none !important; }
         .tab-content.active { display: flex !important; }
 
-        /* Chatbox Custom Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .chat-msg { animation: fadeIn 0.3s ease-out; }
     </style>
 </head>
 <body class="flex h-screen text-xs">
 
-    <!-- SIDEBAR -->
-    <aside class="w-64 panel flex flex-col m-3 border-r border-pgBorder bg-bgMain rounded-none border-t-0 border-b-0 border-l-0">
+    <aside class="w-[280px] panel flex flex-col m-3 border-r border-pgBorder bg-bgMain rounded-none border-t-0 border-b-0 border-l-0">
         <div class="p-5 border-b border-pgBorder flex items-center gap-3">
             <i class="fa-solid fa-shield-halved text-pgGreen text-3xl drop-shadow-[0_0_8px_rgba(0,210,106,0.6)]"></i>
             <div>
                 <h1 class="font-bold text-white text-sm">PhishGuard</h1>
-                <p class="text-[8px] text-gray-400">ENTERPRISE COMMAND CENTER</p>
+                <p class="text-[8px] text-gray-400 uppercase tracking-widest">Enterprise Command Center</p>
             </div>
         </div>
         <nav class="flex-1 p-3 space-y-1">
             <button onclick="switchTab('dashboard')" id="btn-dashboard" class="w-full flex items-center gap-3 p-3 bg-bgPanel border-l-4 border-pgGreen text-white rounded transition shadow-sm">
-                <i class="fa-solid fa-table-columns w-5 text-pgGreen"></i>
+                <i class="fa-solid fa-table-columns w-5 text-pgGreen text-lg"></i>
                 <div class="text-left"><p class="font-bold text-xs">Dashboard</p><p class="text-[9px] text-gray-500">Current URL Scanner</p></div>
             </button>
+            <button onclick="switchTab('adv')" id="btn-adv" class="w-full flex items-center gap-3 p-3 hover:bg-bgPanel border-l-4 border-transparent text-gray-400 hover:text-white rounded transition">
+                <i class="fa-solid fa-atom w-5 text-lg"></i>
+                <div class="text-left"><p class="font-bold text-xs">Advanced AI Analysis</p><p class="text-[9px] text-gray-500">New view</p></div>
+            </button>
+            <button onclick="switchTab('qr')" id="btn-qr" class="w-full flex items-center gap-3 p-3 hover:bg-bgPanel border-l-4 border-transparent text-gray-400 hover:text-white rounded transition">
+                <i class="fa-solid fa-qrcode w-5 text-lg"></i>
+                <div class="text-left"><p class="font-bold text-xs">QR Forensics</p><p class="text-[9px] text-gray-500">New view</p></div>
+            </button>
             <button onclick="switchTab('nlp')" id="btn-nlp" class="w-full flex items-center gap-3 p-3 hover:bg-bgPanel border-l-4 border-transparent text-gray-400 hover:text-white rounded transition">
-                <i class="fa-regular fa-envelope w-5"></i>
+                <i class="fa-regular fa-envelope w-5 text-lg"></i>
                 <div class="text-left"><p class="font-bold text-xs">Email Sentiment</p><p class="text-[9px] text-gray-500">NLP view</p></div>
+            </button>
+            <button onclick="switchTab('intel')" id="btn-intel" class="w-full flex items-center gap-3 p-3 hover:bg-bgPanel border-l-4 border-transparent text-gray-400 hover:text-white rounded transition">
+                <i class="fa-solid fa-earth-americas w-5 text-lg"></i>
+                <div class="text-left"><p class="font-bold text-xs">Threat Intelligence Feed</p><p class="text-[9px] text-gray-500">New view</p></div>
+            </button>
+            <button onclick="switchTab('reports')" id="btn-reports" class="w-full flex items-center gap-3 p-3 hover:bg-bgPanel border-l-4 border-transparent text-gray-400 hover:text-white rounded transition">
+                <i class="fa-solid fa-file-lines w-5 text-lg"></i>
+                <div class="text-left"><p class="font-bold text-xs">Detailed Reports</p><p class="text-[9px] text-gray-500">New view</p></div>
             </button>
         </nav>
     </aside>
 
-    <!-- MAIN WINDOW -->
     <main class="flex-1 flex flex-col p-3 h-full overflow-y-auto relative">
         
-        <!-- HEADER -->
         <header class="panel mb-4 flex justify-between items-center p-3 px-5 shadow-sm">
             <div class="flex items-center gap-2 text-[10px] text-red-500 font-bold tracking-widest"><div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div> GLOBAL INTEL FEED</div>
             <div class="text-[10px] text-gray-500 truncate text-center flex-1 mx-4">[ALERT] Zero-day MFA bypass targeting Financial sectors</div>
@@ -73,10 +85,8 @@
             </div>
         </header>
 
-        <!-- =================== TAB 1: DASHBOARD =================== -->
         <div id="view-dashboard" class="tab-content active flex-col flex-1">
             
-            <!-- Input Area -->
             <div class="flex gap-4 mb-4">
                 <div class="flex-1 panel flex items-center px-4 bg-bgMain border-pgBorder focus-within:border-pgGreen transition shadow-inner">
                     <i class="fa-solid fa-link text-gray-500 mr-3"></i>
@@ -87,7 +97,6 @@
                 </button>
             </div>
 
-            <!-- 4 Grid Stats -->
             <div class="grid grid-cols-4 gap-4 mb-4">
                 <div class="flex flex-col gap-4">
                     <div class="panel p-4 h-full shadow-sm">
@@ -139,24 +148,21 @@
                 </div>
             </div>
 
-            <!-- Bottom Section -->
             <div class="grid grid-cols-3 gap-4 flex-1 pb-2">
-                <!-- Threat Matrix Gauge -->
                 <div class="panel p-4 flex flex-col relative items-center justify-center col-span-1 shadow-sm">
                     <h3 class="absolute top-4 left-4 text-[9px] text-gray-400 font-bold uppercase">FINAL THREAT MATRIX</h3>
                     <span class="absolute top-4 right-4 text-[8px] text-pgGreen flex items-center gap-1"><div class="w-1.5 h-1.5 bg-pgGreen rounded-full animate-pulse"></div> LIVE DATA</span>
                     
                     <svg viewBox="0 0 36 36" class="circular-chart mt-4 drop-shadow-md">
                         <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path id="gauge-circle" class="circle" style="stroke: #00d26a;" stroke-dasharray="35, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <text id="score-display" x="18" y="20.35" class="percentage">35</text>
+                        <path id="gauge-circle" class="circle" style="stroke: #00d26a;" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <text id="score-display" x="18" y="20.35" class="percentage">0</text>
                         <text x="18" y="24" class="sub-text">/ 100</text>
                     </svg>
                     
-                    <div id="status-badge" class="mt-6 px-8 py-1.5 border border-pgGreen rounded-full text-pgGreen text-[10px] font-bold tracking-wider">STATUS: SAFE</div>
+                    <div id="status-badge" class="mt-6 px-8 py-1.5 border border-pgGreen rounded-full text-pgGreen text-[10px] font-bold tracking-wider">AWAITING SCAN</div>
                 </div>
 
-                <!-- Terminal -->
                 <div class="panel bg-bgMain flex flex-col p-4 col-span-1 shadow-inner">
                     <div class="flex-1 font-mono text-[11px] text-gray-400 overflow-y-auto leading-relaxed" id="terminal">
                         <p class="text-pgGreen">> System Initialized.</p>
@@ -164,7 +170,6 @@
                     </div>
                 </div>
 
-                <!-- Report Section -->
                 <div class="panel p-4 flex flex-col col-span-1 shadow-sm">
                     <button onclick="generateAIReport()" class="w-full bg-bgMain border border-pgGreen text-pgGreen hover:bg-pgGreen hover:text-black py-2.5 rounded text-[10px] font-bold transition flex justify-center items-center gap-2 mb-4 shadow-[0_0_10px_rgba(0,210,106,0.1)]">
                         <i class="fa-solid fa-file-invoice"></i> Generate AI Incident Report
@@ -182,7 +187,6 @@
             </div>
         </div>
 
-        <!-- =================== TAB 2: EMAIL SENTIMENT =================== -->
         <div id="view-nlp" class="tab-content flex-col flex-1 p-6 panel shadow-sm">
             <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-brain text-pgGreen mr-2"></i> Email Sentiment (NLP)</h2>
             <textarea id="nlpInput" placeholder="Paste suspicious email/SMS text here..." class="w-full h-40 bg-bgMain border border-pgBorder p-4 text-white text-sm outline-none focus:border-pgGreen rounded mb-6 resize-none shadow-inner"></textarea>
@@ -194,18 +198,30 @@
             </div>
         </div>
 
+        <div id="view-adv" class="tab-content flex-col flex-1 p-6 panel items-center justify-center text-center"><i class="fa-solid fa-atom text-5xl text-gray-600 mb-4"></i><p class="text-gray-400 text-sm">Advanced AI Analysis module coming soon in Enterprise v2.0.</p></div>
+        <div id="view-qr" class="tab-content flex-col flex-1 p-6 panel items-center justify-center text-center"><i class="fa-solid fa-qrcode text-5xl text-gray-600 mb-4"></i><p class="text-gray-400 text-sm">QR Forensics module coming soon in Enterprise v2.0.</p></div>
+        <div id="view-intel" class="tab-content flex-col flex-1 p-6 panel items-center justify-center text-center"><i class="fa-solid fa-earth-americas text-5xl text-gray-600 mb-4"></i><p class="text-gray-400 text-sm">Global Threat Intelligence Feed synchronization in progress...</p></div>
+        <div id="view-reports" class="tab-content flex-col flex-1 p-6 panel items-center justify-center text-center"><i class="fa-solid fa-file-lines text-5xl text-gray-600 mb-4"></i><p class="text-gray-400 text-sm">Detailed Reports repository is currently empty.</p></div>
+
     </main>
 
-    <!-- FLOATING CHATBOT -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        <div id="chat-window" class="panel w-80 mb-4 hidden flex-col shadow-2xl border border-pgBorder rounded-xl overflow-hidden">
+        <div id="chat-window" class="panel w-[350px] mb-4 hidden flex-col shadow-2xl border border-pgBorder rounded-xl overflow-hidden">
             <div class="bg-bgPanel p-4 border-b border-pgBorder flex justify-between items-center shadow-sm">
                 <div class="flex items-center gap-2"><i class="fa-solid fa-shield text-pgGreen text-base drop-shadow-[0_0_5px_rgba(0,210,106,0.8)]"></i><span class="font-bold text-sm text-white tracking-wide">PhishGuard Copilot</span></div>
                 <i class="fa-solid fa-xmark cursor-pointer text-gray-400 hover:text-white transition text-lg" onclick="toggleChat()"></i>
             </div>
-            <div id="chat-messages" class="h-72 overflow-y-auto p-4 text-xs space-y-4 bg-bgMain">
-                <div class="chat-msg bg-bgPanel text-gray-300 p-3 rounded-lg rounded-tl-none border border-pgBorder text-left w-[85%] leading-relaxed shadow-sm">Hello, I am your PhishGuard Copilot. How can I assist with your investigation today?</div>
+            
+            <div id="chat-messages" class="h-64 overflow-y-auto p-4 text-xs space-y-4 bg-bgMain">
+                <div class="chat-msg bg-bgPanel text-gray-300 p-3 rounded-lg rounded-tl-none border border-pgBorder text-left w-[85%] leading-relaxed shadow-sm">Hello, I am your PhishGuard Copilot. Select a question below or type your own to begin.</div>
             </div>
+            
+            <div class="p-2 bg-bgMain border-t border-pgBorder flex flex-wrap gap-2 justify-center">
+                <button onclick="fillAndSend('How does PhishGuard ML scanner work?')" class="bg-bgPanel text-pgGreen border border-pgGreen px-3 py-1.5 rounded-full text-[10px] hover:bg-pgGreen hover:text-black transition">How Scanner Works?</button>
+                <button onclick="fillAndSend('Explain NLP Email Sentiment analysis.')" class="bg-bgPanel text-pgGreen border border-pgGreen px-3 py-1.5 rounded-full text-[10px] hover:bg-pgGreen hover:text-black transition">Explain NLP</button>
+                <button onclick="fillAndSend('What are the latest zero-day phishing threats?')" class="bg-bgPanel text-pgGreen border border-pgGreen px-3 py-1.5 rounded-full text-[10px] hover:bg-pgGreen hover:text-black transition">Latest Threats?</button>
+            </div>
+
             <div class="p-3 bg-bgPanel border-t border-pgBorder flex gap-2">
                 <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-bgMain text-white text-xs px-4 py-2.5 rounded-full border border-pgBorder outline-none focus:border-pgGreen transition shadow-inner" onkeypress="if(event.key === 'Enter') sendChatMessage()">
                 <button onclick="sendChatMessage()" class="text-pgGreen hover:text-white px-3 transition"><i class="fa-solid fa-paper-plane text-lg"></i></button>
@@ -217,10 +233,9 @@
         </button>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         const API_BASE = 'https://phishguard-ai-gvor.onrender.com/api'; 
-        let currentUrlScore = 35; // Default to match screenshot
+        let currentUrlScore = 0; 
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -285,7 +300,7 @@
                 document.getElementById('keyword-text2').innerText = isMal ? "Warning - Flagged" : "Not Blacklisted";
                 document.getElementById('keyword-text2').className = `text-xs font-bold mt-4 ${colorClass}`;
 
-                // Gauge Matrix Fix
+                // Gauge Matrix Fix: Dynamic Update
                 document.getElementById('score-display').textContent = data.score;
                 const circle = document.getElementById('gauge-circle');
                 circle.setAttribute('stroke-dasharray', `${data.score}, 100`);
@@ -302,12 +317,12 @@
         }
 
         async function generateAIReport() {
-            const url = document.getElementById('urlInput').value || 'example.com';
+            const url = document.getElementById('urlInput').value || 'Unknown';
             const output = document.getElementById('report-output');
             
             document.getElementById('scan-hist-container').classList.add('hidden');
             output.classList.remove('hidden');
-            output.innerHTML = '<span class="text-pgGreen animate-pulse"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Compiling SOC Report via Google AI...</span>';
+            output.innerHTML = '<span class="text-pgGreen animate-pulse"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Compiling SOC Report via AI Engine...</span>';
 
             try {
                 const response = await fetch(`${API_BASE}/report`, {
@@ -316,7 +331,7 @@
                 const data = await response.json();
                 output.innerHTML = `<span class="text-white font-bold mb-2 block border-b border-pgBorder pb-1">AI Incident Summary:</span><div class="text-gray-300">${data.report.replace(/\n/g, '<br>')}</div>`;
             } catch (e) {
-                output.innerHTML = '<span class="text-red-500"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Failed to generate AI report.</span>';
+                output.innerHTML = '<span class="text-red-500"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Failed to generate AI report. Please check server.</span>';
             }
         }
 
@@ -351,6 +366,12 @@
             chat.classList.toggle('flex');
         }
 
+        // New function for pre-defined questions
+        function fillAndSend(msg) {
+            document.getElementById('chat-input').value = msg;
+            sendChatMessage();
+        }
+
         async function sendChatMessage() {
             const input = document.getElementById('chat-input');
             const msg = input.value;
@@ -361,7 +382,7 @@
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            chatBox.innerHTML += `<div id="typing" class="mb-4 chat-msg"><span class="bg-bgPanel text-gray-500 p-3 rounded-lg rounded-tl-none inline-block border border-pgBorder"><i class="fa-solid fa-ellipsis fa-fade"></i> AI is thinking...</span></div>`;
+            chatBox.innerHTML += `<div id="typing" class="mb-4 chat-msg"><span class="bg-bgPanel text-gray-500 p-3 rounded-lg rounded-tl-none inline-block border border-pgBorder"><i class="fa-solid fa-ellipsis fa-fade"></i> AI is investigating...</span></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
@@ -374,7 +395,7 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (error) {
                 document.getElementById('typing').remove();
-                chatBox.innerHTML += `<div class="mb-4 chat-msg"><span class="text-red-500 bg-red-900/20 p-3 rounded-lg rounded-tl-none border border-red-500 inline-block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Connection Failed.</span></div>`;
+                chatBox.innerHTML += `<div class="mb-4 chat-msg"><span class="text-red-500 bg-red-900/20 p-3 rounded-lg rounded-tl-none border border-red-500 inline-block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Connection Failed. Backend offline.</span></div>`;
             }
         }
     </script>

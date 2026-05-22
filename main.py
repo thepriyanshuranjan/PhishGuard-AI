@@ -10,25 +10,39 @@ app = Flask(__name__)
 CORS(app) 
 
 # ==========================================
-# 🧠 DIRECT AI API BYPASS (No SDK Needed)
+# 🧠 DIRECT AI API BYPASS WITH FALLBACK (NO 404 ERRORS)
 # ==========================================
 GEMINI_API_KEY = "AIzaSyA9trqBMSf37pfRyIITnC6H_t2oUGFvF8c" 
 
 def call_gemini_api(prompt):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+    # Try the latest flash model first
+    primary_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={GEMINI_API_KEY}"
+    fallback_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
+    
     data = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode('utf-8')
-    req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'})
     
     try:
+        # Attempt Primary Model
+        req = urllib.request.Request(primary_url, data=data, headers={'Content-Type': 'application/json'})
         with urllib.request.urlopen(req) as response:
-            res_body = response.read()
-            res_json = json.loads(res_body.decode('utf-8'))
+            res_json = json.loads(response.read().decode('utf-8'))
             return res_json['candidates'][0]['content']['parts'][0]['text']
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            # If 404 occurs, seamlessly fallback to gemini-pro
+            try:
+                req_fallback = urllib.request.Request(fallback_url, data=data, headers={'Content-Type': 'application/json'})
+                with urllib.request.urlopen(req_fallback) as response:
+                    res_json = json.loads(response.read().decode('utf-8'))
+                    return res_json['candidates'][0]['content']['parts'][0]['text']
+            except Exception as ex:
+                return f"AI Engine Fallback Failed: {str(ex)}"
+        return f"API Error: HTTP {e.code}"
     except Exception as e:
-        return f"AI Engine Bypass Error: {str(e)}"
+        return f"System Offline: {str(e)}"
 
 # ==========================================
-# 📊 ML CORE
+# 📊 ML CORE LOGIC
 # ==========================================
 def calculate_entropy(text):
     if not text: return 0
@@ -44,13 +58,14 @@ def analyze_url():
     if not url: return jsonify({"error": "URL missing"}), 400
         
     entropy = calculate_entropy(url)
-    suspicious_keywords = ['login', 'verify', 'update', 'free', 'secure', 'auth', 'account']
+    suspicious_keywords = ['login', 'verify', 'update', 'free', 'secure', 'auth', 'account', 'admin']
     found_keywords = [word for word in suspicious_keywords if word in url]
     
-    risk_score = 15
-    if entropy > 4.0: risk_score += 30
-    if len(found_keywords) > 0: risk_score += 25
-    if "-" in url: risk_score += 10
+    # Safe score logic fix
+    risk_score = 5 # Start low for safe sites
+    if entropy > 3.8: risk_score += 25
+    if len(found_keywords) > 0: risk_score += (len(found_keywords) * 20)
+    if "-" in url: risk_score += 15
     if url.count('.') > 2: risk_score += 15
     if not url.startswith("https"): risk_score += 20
     
@@ -85,7 +100,7 @@ def generate_report():
     data = request.json
     url = data.get('url', 'Unknown')
     score = data.get('score', 0)
-    prompt = f"Act as an expert SOC Analyst. Write a highly technical 3-bullet Incident Report for the URL '{url}' with a Threat Score of {score}/100. Mention risks clearly and concisely."
+    prompt = f"Act as an expert SOC Analyst. Write a short, highly technical 3-bullet point Incident Report for the URL '{url}' with a Threat Score of {score}/100. Highlight risks clearly."
     
     ai_response = call_gemini_api(prompt)
     return jsonify({"report": ai_response})
